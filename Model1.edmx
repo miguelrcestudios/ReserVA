@@ -1,0 +1,781 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ReserVAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Barrio">
+          <Key>
+            <PropertyRef Name="IdBarrio" />
+          </Key>
+          <Property Name="IdBarrio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoBarrio" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Espacio">
+          <Key>
+            <PropertyRef Name="IdEspacio" />
+          </Key>
+          <Property Name="IdEspacio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdRecinto" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Tipo" Type="nvarchar" MaxLength="200" />
+          <Property Name="Descripcion" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Recinto">
+          <Key>
+            <PropertyRef Name="IdRecinto" />
+          </Key>
+          <Property Name="IdRecinto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Direccion" Type="nvarchar" MaxLength="500" />
+          <Property Name="IdSubzona" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Reserva">
+          <Key>
+            <PropertyRef Name="IdReserva" />
+          </Key>
+          <Property Name="IdReserva" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="IdEspacio" Type="int" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
+          <Property Name="HoraInicio" Type="time" Precision="7" Nullable="false" />
+          <Property Name="HoraFin" Type="time" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rol">
+          <Key>
+            <PropertyRef Name="IdRol" />
+          </Key>
+          <Property Name="IdRol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subzona">
+          <Key>
+            <PropertyRef Name="IdSubzona" />
+          </Key>
+          <Property Name="IdSubzona" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdBarrio" Type="int" Nullable="false" />
+          <Property Name="CodigoSubzona" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="UsoEspacio">
+          <Key>
+            <PropertyRef Name="IdUsoEspacio" />
+          </Key>
+          <Property Name="IdUsoEspacio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEspacio" Type="int" Nullable="false" />
+          <Property Name="IdUsoEspecifico" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UsoEspecifico">
+          <Key>
+            <PropertyRef Name="IdUsoEspecifico" />
+          </Key>
+          <Property Name="IdUsoEspecifico" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsoGeneral" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UsoGeneral">
+          <Key>
+            <PropertyRef Name="IdUsoGeneral" />
+          </Key>
+          <Property Name="IdUsoGeneral" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Apellidos" Type="nvarchar" MaxLength="500" />
+          <Property Name="DocumentoIdentidad" Type="nvarchar" MaxLength="9" Nullable="false" />
+          <Property Name="Telefono" Type="nvarchar" MaxLength="20" />
+          <Property Name="CorreoElectronico" Type="nvarchar" MaxLength="255" />
+          <Property Name="Contraseña" Type="nvarchar" MaxLength="255" />
+          <Property Name="IdRol" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Espacio__IdRecin__412EB0B6">
+          <End Role="Recinto" Type="Self.Recinto" Multiplicity="1" />
+          <End Role="Espacio" Type="Self.Espacio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Recinto">
+              <PropertyRef Name="IdRecinto" />
+            </Principal>
+            <Dependent Role="Espacio">
+              <PropertyRef Name="IdRecinto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recinto__IdSubzo__3E52440B">
+          <End Role="Subzona" Type="Self.Subzona" Multiplicity="1" />
+          <End Role="Recinto" Type="Self.Recinto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subzona">
+              <PropertyRef Name="IdSubzona" />
+            </Principal>
+            <Dependent Role="Recinto">
+              <PropertyRef Name="IdSubzona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserva__IdEspac__49C3F6B7">
+          <End Role="Espacio" Type="Self.Espacio" Multiplicity="1" />
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espacio">
+              <PropertyRef Name="IdEspacio" />
+            </Principal>
+            <Dependent Role="Reserva">
+              <PropertyRef Name="IdEspacio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserva__IdUsuar__48CFD27E">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Reserva">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Subzona__IdBarri__3B75D760">
+          <End Role="Barrio" Type="Self.Barrio" Multiplicity="1" />
+          <End Role="Subzona" Type="Self.Subzona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Barrio">
+              <PropertyRef Name="IdBarrio" />
+            </Principal>
+            <Dependent Role="Subzona">
+              <PropertyRef Name="IdBarrio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UsoEspaci__IdEsp__5165187F">
+          <End Role="Espacio" Type="Self.Espacio" Multiplicity="1" />
+          <End Role="UsoEspacio" Type="Self.UsoEspacio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espacio">
+              <PropertyRef Name="IdEspacio" />
+            </Principal>
+            <Dependent Role="UsoEspacio">
+              <PropertyRef Name="IdEspacio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UsoEspaci__IdUso__52593CB8">
+          <End Role="UsoEspecifico" Type="Self.UsoEspecifico" Multiplicity="1" />
+          <End Role="UsoEspacio" Type="Self.UsoEspacio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsoEspecifico">
+              <PropertyRef Name="IdUsoEspecifico" />
+            </Principal>
+            <Dependent Role="UsoEspacio">
+              <PropertyRef Name="IdUsoEspecifico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UsoEspeci__IdUso__4E88ABD4">
+          <End Role="UsoGeneral" Type="Self.UsoGeneral" Multiplicity="1" />
+          <End Role="UsoEspecifico" Type="Self.UsoEspecifico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsoGeneral">
+              <PropertyRef Name="IdUsoGeneral" />
+            </Principal>
+            <Dependent Role="UsoEspecifico">
+              <PropertyRef Name="IdUsoGeneral" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuario__IdRol__45F365D3">
+          <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rol">
+              <PropertyRef Name="IdRol" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="IdRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="ReserVAModelStoreContainer">
+          <EntitySet Name="Barrio" EntityType="Self.Barrio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Espacio" EntityType="Self.Espacio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Recinto" EntityType="Self.Recinto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reserva" EntityType="Self.Reserva" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subzona" EntityType="Self.Subzona" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UsoEspacio" EntityType="Self.UsoEspacio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UsoEspecifico" EntityType="Self.UsoEspecifico" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UsoGeneral" EntityType="Self.UsoGeneral" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Espacio__IdRecin__412EB0B6" Association="Self.FK__Espacio__IdRecin__412EB0B6">
+            <End Role="Recinto" EntitySet="Recinto" />
+            <End Role="Espacio" EntitySet="Espacio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recinto__IdSubzo__3E52440B" Association="Self.FK__Recinto__IdSubzo__3E52440B">
+            <End Role="Subzona" EntitySet="Subzona" />
+            <End Role="Recinto" EntitySet="Recinto" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserva__IdEspac__49C3F6B7" Association="Self.FK__Reserva__IdEspac__49C3F6B7">
+            <End Role="Espacio" EntitySet="Espacio" />
+            <End Role="Reserva" EntitySet="Reserva" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserva__IdUsuar__48CFD27E" Association="Self.FK__Reserva__IdUsuar__48CFD27E">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Reserva" EntitySet="Reserva" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Subzona__IdBarri__3B75D760" Association="Self.FK__Subzona__IdBarri__3B75D760">
+            <End Role="Barrio" EntitySet="Barrio" />
+            <End Role="Subzona" EntitySet="Subzona" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UsoEspaci__IdEsp__5165187F" Association="Self.FK__UsoEspaci__IdEsp__5165187F">
+            <End Role="Espacio" EntitySet="Espacio" />
+            <End Role="UsoEspacio" EntitySet="UsoEspacio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UsoEspaci__IdUso__52593CB8" Association="Self.FK__UsoEspaci__IdUso__52593CB8">
+            <End Role="UsoEspecifico" EntitySet="UsoEspecifico" />
+            <End Role="UsoEspacio" EntitySet="UsoEspacio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UsoEspeci__IdUso__4E88ABD4" Association="Self.FK__UsoEspeci__IdUso__4E88ABD4">
+            <End Role="UsoGeneral" EntitySet="UsoGeneral" />
+            <End Role="UsoEspecifico" EntitySet="UsoEspecifico" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Usuario__IdRol__45F365D3" Association="Self.FK__Usuario__IdRol__45F365D3">
+            <End Role="Rol" EntitySet="Rol" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ReserVAModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Barrio">
+          <Key>
+            <PropertyRef Name="IdBarrio" />
+          </Key>
+          <Property Name="IdBarrio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoBarrio" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Subzona" Relationship="Self.FK__Subzona__IdBarri__3B75D760" FromRole="Barrio" ToRole="Subzona" />
+        </EntityType>
+        <EntityType Name="Espacio">
+          <Key>
+            <PropertyRef Name="IdEspacio" />
+          </Key>
+          <Property Name="IdEspacio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdRecinto" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Tipo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Recinto" Relationship="Self.FK__Espacio__IdRecin__412EB0B6" FromRole="Espacio" ToRole="Recinto" />
+          <NavigationProperty Name="Reserva" Relationship="Self.FK__Reserva__IdEspac__49C3F6B7" FromRole="Espacio" ToRole="Reserva" />
+          <NavigationProperty Name="UsoEspacio" Relationship="Self.FK__UsoEspaci__IdEsp__5165187F" FromRole="Espacio" ToRole="UsoEspacio" />
+        </EntityType>
+        <EntityType Name="Recinto">
+          <Key>
+            <PropertyRef Name="IdRecinto" />
+          </Key>
+          <Property Name="IdRecinto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Direccion" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IdSubzona" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Espacio" Relationship="Self.FK__Espacio__IdRecin__412EB0B6" FromRole="Recinto" ToRole="Espacio" />
+          <NavigationProperty Name="Subzona" Relationship="Self.FK__Recinto__IdSubzo__3E52440B" FromRole="Recinto" ToRole="Subzona" />
+        </EntityType>
+        <EntityType Name="Reserva">
+          <Key>
+            <PropertyRef Name="IdReserva" />
+          </Key>
+          <Property Name="IdReserva" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdEspacio" Type="Int32" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="HoraInicio" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="HoraFin" Type="Time" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Espacio" Relationship="Self.FK__Reserva__IdEspac__49C3F6B7" FromRole="Reserva" ToRole="Espacio" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Reserva__IdUsuar__48CFD27E" FromRole="Reserva" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Rol">
+          <Key>
+            <PropertyRef Name="IdRol" />
+          </Key>
+          <Property Name="IdRol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK__Usuario__IdRol__45F365D3" FromRole="Rol" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Subzona">
+          <Key>
+            <PropertyRef Name="IdSubzona" />
+          </Key>
+          <Property Name="IdSubzona" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdBarrio" Type="Int32" Nullable="false" />
+          <Property Name="CodigoSubzona" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Barrio" Relationship="Self.FK__Subzona__IdBarri__3B75D760" FromRole="Subzona" ToRole="Barrio" />
+          <NavigationProperty Name="Recinto" Relationship="Self.FK__Recinto__IdSubzo__3E52440B" FromRole="Subzona" ToRole="Recinto" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="UsoEspacio">
+          <Key>
+            <PropertyRef Name="IdUsoEspacio" />
+          </Key>
+          <Property Name="IdUsoEspacio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEspacio" Type="Int32" Nullable="false" />
+          <Property Name="IdUsoEspecifico" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Espacio" Relationship="Self.FK__UsoEspaci__IdEsp__5165187F" FromRole="UsoEspacio" ToRole="Espacio" />
+          <NavigationProperty Name="UsoEspecifico" Relationship="Self.FK__UsoEspaci__IdUso__52593CB8" FromRole="UsoEspacio" ToRole="UsoEspecifico" />
+        </EntityType>
+        <EntityType Name="UsoEspecifico">
+          <Key>
+            <PropertyRef Name="IdUsoEspecifico" />
+          </Key>
+          <Property Name="IdUsoEspecifico" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsoGeneral" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="UsoEspacio" Relationship="Self.FK__UsoEspaci__IdUso__52593CB8" FromRole="UsoEspecifico" ToRole="UsoEspacio" />
+          <NavigationProperty Name="UsoGeneral" Relationship="Self.FK__UsoEspeci__IdUso__4E88ABD4" FromRole="UsoEspecifico" ToRole="UsoGeneral" />
+        </EntityType>
+        <EntityType Name="UsoGeneral">
+          <Key>
+            <PropertyRef Name="IdUsoGeneral" />
+          </Key>
+          <Property Name="IdUsoGeneral" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="UsoEspecifico" Relationship="Self.FK__UsoEspeci__IdUso__4E88ABD4" FromRole="UsoGeneral" ToRole="UsoEspecifico" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Apellidos" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentoIdentidad" Type="String" MaxLength="9" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CorreoElectronico" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Contraseña" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="IdRol" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Reserva" Relationship="Self.FK__Reserva__IdUsuar__48CFD27E" FromRole="Usuario" ToRole="Reserva" />
+          <NavigationProperty Name="Rol" Relationship="Self.FK__Usuario__IdRol__45F365D3" FromRole="Usuario" ToRole="Rol" />
+        </EntityType>
+        <Association Name="FK__Subzona__IdBarri__3B75D760">
+          <End Role="Barrio" Type="Self.Barrio" Multiplicity="1" />
+          <End Role="Subzona" Type="Self.Subzona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Barrio">
+              <PropertyRef Name="IdBarrio" />
+            </Principal>
+            <Dependent Role="Subzona">
+              <PropertyRef Name="IdBarrio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Espacio__IdRecin__412EB0B6">
+          <End Role="Recinto" Type="Self.Recinto" Multiplicity="1" />
+          <End Role="Espacio" Type="Self.Espacio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Recinto">
+              <PropertyRef Name="IdRecinto" />
+            </Principal>
+            <Dependent Role="Espacio">
+              <PropertyRef Name="IdRecinto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserva__IdEspac__49C3F6B7">
+          <End Role="Espacio" Type="Self.Espacio" Multiplicity="1" />
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espacio">
+              <PropertyRef Name="IdEspacio" />
+            </Principal>
+            <Dependent Role="Reserva">
+              <PropertyRef Name="IdEspacio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UsoEspaci__IdEsp__5165187F">
+          <End Role="Espacio" Type="Self.Espacio" Multiplicity="1" />
+          <End Role="UsoEspacio" Type="Self.UsoEspacio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espacio">
+              <PropertyRef Name="IdEspacio" />
+            </Principal>
+            <Dependent Role="UsoEspacio">
+              <PropertyRef Name="IdEspacio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recinto__IdSubzo__3E52440B">
+          <End Role="Subzona" Type="Self.Subzona" Multiplicity="1" />
+          <End Role="Recinto" Type="Self.Recinto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subzona">
+              <PropertyRef Name="IdSubzona" />
+            </Principal>
+            <Dependent Role="Recinto">
+              <PropertyRef Name="IdSubzona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reserva__IdUsuar__48CFD27E">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Reserva">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuario__IdRol__45F365D3">
+          <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rol">
+              <PropertyRef Name="IdRol" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="IdRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UsoEspaci__IdUso__52593CB8">
+          <End Role="UsoEspecifico" Type="Self.UsoEspecifico" Multiplicity="1" />
+          <End Role="UsoEspacio" Type="Self.UsoEspacio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsoEspecifico">
+              <PropertyRef Name="IdUsoEspecifico" />
+            </Principal>
+            <Dependent Role="UsoEspacio">
+              <PropertyRef Name="IdUsoEspecifico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UsoEspeci__IdUso__4E88ABD4">
+          <End Role="UsoGeneral" Type="Self.UsoGeneral" Multiplicity="1" />
+          <End Role="UsoEspecifico" Type="Self.UsoEspecifico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsoGeneral">
+              <PropertyRef Name="IdUsoGeneral" />
+            </Principal>
+            <Dependent Role="UsoEspecifico">
+              <PropertyRef Name="IdUsoGeneral" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ReserVAEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Barrio" EntityType="Self.Barrio" />
+          <EntitySet Name="Espacio" EntityType="Self.Espacio" />
+          <EntitySet Name="Recinto" EntityType="Self.Recinto" />
+          <EntitySet Name="Reserva" EntityType="Self.Reserva" />
+          <EntitySet Name="Rol" EntityType="Self.Rol" />
+          <EntitySet Name="Subzona" EntityType="Self.Subzona" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="UsoEspacio" EntityType="Self.UsoEspacio" />
+          <EntitySet Name="UsoEspecifico" EntityType="Self.UsoEspecifico" />
+          <EntitySet Name="UsoGeneral" EntityType="Self.UsoGeneral" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+          <AssociationSet Name="FK__Subzona__IdBarri__3B75D760" Association="Self.FK__Subzona__IdBarri__3B75D760">
+            <End Role="Barrio" EntitySet="Barrio" />
+            <End Role="Subzona" EntitySet="Subzona" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Espacio__IdRecin__412EB0B6" Association="Self.FK__Espacio__IdRecin__412EB0B6">
+            <End Role="Recinto" EntitySet="Recinto" />
+            <End Role="Espacio" EntitySet="Espacio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserva__IdEspac__49C3F6B7" Association="Self.FK__Reserva__IdEspac__49C3F6B7">
+            <End Role="Espacio" EntitySet="Espacio" />
+            <End Role="Reserva" EntitySet="Reserva" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UsoEspaci__IdEsp__5165187F" Association="Self.FK__UsoEspaci__IdEsp__5165187F">
+            <End Role="Espacio" EntitySet="Espacio" />
+            <End Role="UsoEspacio" EntitySet="UsoEspacio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recinto__IdSubzo__3E52440B" Association="Self.FK__Recinto__IdSubzo__3E52440B">
+            <End Role="Subzona" EntitySet="Subzona" />
+            <End Role="Recinto" EntitySet="Recinto" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reserva__IdUsuar__48CFD27E" Association="Self.FK__Reserva__IdUsuar__48CFD27E">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Reserva" EntitySet="Reserva" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Usuario__IdRol__45F365D3" Association="Self.FK__Usuario__IdRol__45F365D3">
+            <End Role="Rol" EntitySet="Rol" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UsoEspaci__IdUso__52593CB8" Association="Self.FK__UsoEspaci__IdUso__52593CB8">
+            <End Role="UsoEspecifico" EntitySet="UsoEspecifico" />
+            <End Role="UsoEspacio" EntitySet="UsoEspacio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UsoEspeci__IdUso__4E88ABD4" Association="Self.FK__UsoEspeci__IdUso__4E88ABD4">
+            <End Role="UsoGeneral" EntitySet="UsoGeneral" />
+            <End Role="UsoEspecifico" EntitySet="UsoEspecifico" />
+          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(ReserVAModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(ReserVAModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ReserVAModelStoreContainer" CdmEntityContainer="ReserVAEntities">
+          <EntitySetMapping Name="Barrio">
+            <EntityTypeMapping TypeName="ReserVAModel.Barrio">
+              <MappingFragment StoreEntitySet="Barrio">
+                <ScalarProperty Name="IdBarrio" ColumnName="IdBarrio" />
+                <ScalarProperty Name="CodigoBarrio" ColumnName="CodigoBarrio" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Espacio">
+            <EntityTypeMapping TypeName="ReserVAModel.Espacio">
+              <MappingFragment StoreEntitySet="Espacio">
+                <ScalarProperty Name="IdEspacio" ColumnName="IdEspacio" />
+                <ScalarProperty Name="IdRecinto" ColumnName="IdRecinto" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Recinto">
+            <EntityTypeMapping TypeName="ReserVAModel.Recinto">
+              <MappingFragment StoreEntitySet="Recinto">
+                <ScalarProperty Name="IdRecinto" ColumnName="IdRecinto" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="IdSubzona" ColumnName="IdSubzona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reserva">
+            <EntityTypeMapping TypeName="ReserVAModel.Reserva">
+              <MappingFragment StoreEntitySet="Reserva">
+                <ScalarProperty Name="IdReserva" ColumnName="IdReserva" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdEspacio" ColumnName="IdEspacio" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="HoraInicio" ColumnName="HoraInicio" />
+                <ScalarProperty Name="HoraFin" ColumnName="HoraFin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rol">
+            <EntityTypeMapping TypeName="ReserVAModel.Rol">
+              <MappingFragment StoreEntitySet="Rol">
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subzona">
+            <EntityTypeMapping TypeName="ReserVAModel.Subzona">
+              <MappingFragment StoreEntitySet="Subzona">
+                <ScalarProperty Name="IdSubzona" ColumnName="IdSubzona" />
+                <ScalarProperty Name="IdBarrio" ColumnName="IdBarrio" />
+                <ScalarProperty Name="CodigoSubzona" ColumnName="CodigoSubzona" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="ReserVAModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UsoEspacio">
+            <EntityTypeMapping TypeName="ReserVAModel.UsoEspacio">
+              <MappingFragment StoreEntitySet="UsoEspacio">
+                <ScalarProperty Name="IdUsoEspacio" ColumnName="IdUsoEspacio" />
+                <ScalarProperty Name="IdEspacio" ColumnName="IdEspacio" />
+                <ScalarProperty Name="IdUsoEspecifico" ColumnName="IdUsoEspecifico" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UsoEspecifico">
+            <EntityTypeMapping TypeName="ReserVAModel.UsoEspecifico">
+              <MappingFragment StoreEntitySet="UsoEspecifico">
+                <ScalarProperty Name="IdUsoEspecifico" ColumnName="IdUsoEspecifico" />
+                <ScalarProperty Name="IdUsoGeneral" ColumnName="IdUsoGeneral" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UsoGeneral">
+            <EntityTypeMapping TypeName="ReserVAModel.UsoGeneral">
+              <MappingFragment StoreEntitySet="UsoGeneral">
+                <ScalarProperty Name="IdUsoGeneral" ColumnName="IdUsoGeneral" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuario">
+            <EntityTypeMapping TypeName="ReserVAModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="DocumentoIdentidad" ColumnName="DocumentoIdentidad" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="CorreoElectronico" ColumnName="CorreoElectronico" />
+                <ScalarProperty Name="Contraseña" ColumnName="Contraseña" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="ReserVAModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="ReserVAModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="ReserVAModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="ReserVAModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ReserVAModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="ReserVAModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ReserVAModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="ReserVAModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="ReserVAModel.Store.sp_upgraddiagrams" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

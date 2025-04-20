@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9452d11102f5467299d5d1b861237ea9" Name="Diagram1">
+        <EntityTypeShape EntityType="ReserVAModel.Barrio" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReserVAModel.Espacio" Width="1.5" PointX="7.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReserVAModel.Recinto" Width="1.5" PointX="5.25" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReserVAModel.Reserva" Width="1.5" PointX="9.75" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReserVAModel.Rol" Width="1.5" PointX="5.25" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReserVAModel.Subzona" Width="1.5" PointX="3" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReserVAModel.sysdiagrams" Width="1.5" PointX="0.5" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReserVAModel.UsoEspacio" Width="1.5" PointX="7.5" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReserVAModel.UsoEspecifico" Width="1.5" PointX="5.25" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReserVAModel.UsoGeneral" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReserVAModel.Usuario" Width="1.5" PointX="7.5" PointY="6.375" IsExpanded="true" />
+        <AssociationConnector Association="ReserVAModel.FK__Subzona__IdBarri__3B75D760" ManuallyRouted="false" />
+        <AssociationConnector Association="ReserVAModel.FK__Espacio__IdRecin__412EB0B6" ManuallyRouted="false" />
+        <AssociationConnector Association="ReserVAModel.FK__Reserva__IdEspac__49C3F6B7" ManuallyRouted="false" />
+        <AssociationConnector Association="ReserVAModel.FK__UsoEspaci__IdEsp__5165187F" ManuallyRouted="false" />
+        <AssociationConnector Association="ReserVAModel.FK__Recinto__IdSubzo__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="ReserVAModel.FK__Reserva__IdUsuar__48CFD27E" ManuallyRouted="false" />
+        <AssociationConnector Association="ReserVAModel.FK__Usuario__IdRol__45F365D3" ManuallyRouted="false" />
+        <AssociationConnector Association="ReserVAModel.FK__UsoEspaci__IdUso__52593CB8" ManuallyRouted="false" />
+        <AssociationConnector Association="ReserVAModel.FK__UsoEspeci__IdUso__4E88ABD4" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
