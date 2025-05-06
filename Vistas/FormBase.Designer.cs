@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using System;
 using ReserVA.Properties;
-using RerserVA.Properties;
 
 namespace ReserVA
 {

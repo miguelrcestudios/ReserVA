@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RerserVA.Properties {
+namespace ReserVA.Properties {
     using System;
     
     

@@ -6,8 +6,8 @@ namespace ReserVA
 {
     partial class FormRegistro
     {
-        private Label lblNombre, lblApellidos, lblDNI, lblTelefono, lblCorreo, lblContraseña, lblRepetirCorreo, lblRepetirContraseña;
-        private TextBox txtNombre, txtApellidos, txtDNI, txtTelefono, txtCorreo, txtContraseña, txtRepetirCorreo, txtRepetirContraseña;
+        private Label lblNombre, lblApellidos, lblDocumentoIdentidad, lblTelefono, lblCorreo, lblRepetirCorreo, lblContraseña, lblRepetirContraseña;
+        private TextBox txtNombre, txtApellidos, txtDocumentoIdentidad, txtTelefono, txtCorreo, txtRepetirCorreo, txtContraseña, txtRepetirContraseña;
         private Button btnRegistrar;
 
         private void InitializeComponent()
@@ -36,13 +36,13 @@ namespace ReserVA
                 Width = 200
             };
 
-            lblDNI = new Label()
+            lblDocumentoIdentidad = new Label()
             {
-                Text = "DNI",
+                Text = "DNI, NIE, o Pasaporte",
                 Location = new Point(50, 150),
                 AutoSize = true
             };
-            txtDNI = new TextBox()
+            txtDocumentoIdentidad = new TextBox()
             {
                 Location = new Point(50, 170),
                 Width = 200
@@ -75,24 +75,24 @@ namespace ReserVA
             lblRepetirCorreo = new Label()
             {
                 Text = "Repetir correo electrónico",
-                Location = new Point(50, 290),
+                Location = new Point(300, 220),
                 AutoSize = true
             };
             txtRepetirCorreo = new TextBox()
             {
-                Location = new Point(50, 310),
+                Location = new Point(300, 240),
                 Width = 200
             };
 
             lblContraseña = new Label()
             {
                 Text = "Contraseña",
-                Location = new Point(300, 220),
+                Location = new Point(50, 290),
                 AutoSize = true
             };
             txtContraseña = new TextBox()
             {
-                Location = new Point(300, 240),
+                Location = new Point(50, 310),
                 Width = 200,
                 UseSystemPasswordChar = true
             };
@@ -121,21 +121,23 @@ namespace ReserVA
                 FlatStyle = FlatStyle.Flat
             };
 
+            btnRegistrar.Click += BtnRegistrar_Click;
+
             // Agregar controles al formulario
             this.Controls.Add(lblNombre);
             this.Controls.Add(txtNombre);
             this.Controls.Add(lblApellidos);
             this.Controls.Add(txtApellidos);
-            this.Controls.Add(lblDNI);
-            this.Controls.Add(txtDNI);
+            this.Controls.Add(lblDocumentoIdentidad);
+            this.Controls.Add(txtDocumentoIdentidad);
             this.Controls.Add(lblTelefono);
             this.Controls.Add(txtTelefono);
             this.Controls.Add(lblCorreo);
             this.Controls.Add(txtCorreo);
-            this.Controls.Add(lblContraseña);
-            this.Controls.Add(txtContraseña);
             this.Controls.Add(lblRepetirCorreo);
             this.Controls.Add(txtRepetirCorreo);
+            this.Controls.Add(lblContraseña);
+            this.Controls.Add(txtContraseña);
             this.Controls.Add(lblRepetirContraseña);
             this.Controls.Add(txtRepetirContraseña);
             this.Controls.Add(btnRegistrar);

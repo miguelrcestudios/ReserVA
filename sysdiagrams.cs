@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RerserVA
+namespace ReserVA
 {
     using System;
     using System.Collections.Generic;

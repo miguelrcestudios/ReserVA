@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReserVA.Controller;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,6 +7,8 @@ namespace ReserVA
 {
     public partial class FormInicioSesion : FormBase
     {
+        public Usuario Usuario {  get; set; }
+
         public FormInicioSesion()
         {
             InitializeComponent();
@@ -16,7 +19,22 @@ namespace ReserVA
 
         private void BtnIniciarSesion_Click(object sender, EventArgs e)
         {
-            // Lógica de autenticación
+            btnIniciarSesion.Enabled = false;
+            btnIniciarSesion.Text = "Iniciando sesión...";
+
+            Usuario usuarioIniciado = UsuarioController.IniciarSesion(txtUsuario.Text, txtContrasena.Text);
+
+            if (usuarioIniciado != null)
+            {
+                Usuario = usuarioIniciado;
+                DialogResult = DialogResult.OK;
+                Hide();
+            }
+            else
+            {
+                btnIniciarSesion.Enabled = true;
+                btnIniciarSesion.Text = "Iniciar sesión";
+            }
         }
 
         private void BtnRegistro_Click(object sender, EventArgs e)

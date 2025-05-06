@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RerserVA
+namespace ReserVA
 {
     using System;
     using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace RerserVA
     
         public int IdSubzona { get; set; }
         public int IdBarrio { get; set; }
-        public int CodigoSubzona { get; set; }
+        public string CodigoSubzona { get; set; }
         public string Nombre { get; set; }
     
         public virtual Barrio Barrio { get; set; }

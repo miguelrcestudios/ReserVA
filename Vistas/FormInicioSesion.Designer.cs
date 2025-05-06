@@ -9,7 +9,7 @@ namespace ReserVA
     {
         private Label lblUsuario, lblContrasena;
         private TextBox txtUsuario, txtContrasena;
-        private Button btnIniciar, btnRegistro;
+        private Button btnIniciarSesion, btnRegistro;
 
         private void InitializeComponent()
         {
@@ -24,7 +24,7 @@ namespace ReserVA
             lblContrasena = new Label() { Text = "Contraseña", Location = new System.Drawing.Point(100, 125), Width = 200 };
             txtContrasena = new TextBox() { Location = new System.Drawing.Point(100, 150), Width = 200, UseSystemPasswordChar = true };
 
-            btnIniciar = new Button() 
+            btnIniciarSesion = new Button() 
             { 
                 Text = "Iniciar sesión",
                 Location = new Point(100, 200),
@@ -43,13 +43,14 @@ namespace ReserVA
                 FlatStyle = FlatStyle.Flat
             };
 
+            btnIniciarSesion.Click += BtnIniciarSesion_Click;
             btnRegistro.Click += BtnRegistro_Click;
 
             this.Controls.Add(lblUsuario);
             this.Controls.Add(txtUsuario);
             this.Controls.Add(lblContrasena);
             this.Controls.Add(txtContrasena);
-            this.Controls.Add(btnIniciar);
+            this.Controls.Add(btnIniciarSesion);
             this.Controls.Add(btnRegistro);
         }
     }

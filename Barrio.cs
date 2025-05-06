@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RerserVA
+namespace ReserVA
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace RerserVA
         }
     
         public int IdBarrio { get; set; }
-        public int CodigoBarrio { get; set; }
+        public string CodigoBarrio { get; set; }
         public string Nombre { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
