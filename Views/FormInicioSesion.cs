@@ -22,7 +22,7 @@ namespace ReserVA
             btnIniciarSesion.Enabled = false;
             btnIniciarSesion.Text = "Iniciando sesión...";
 
-            Usuario usuarioIniciado = UsuarioController.IniciarSesion(txtUsuario.Text, txtContrasena.Text);
+            Usuario usuarioIniciado = UsuarioController.IniciarSesion(tbxUsuario.Text, tbxContrasena.Text);
 
             if (usuarioIniciado != null)
             {

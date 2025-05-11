@@ -61,25 +61,24 @@ namespace ReserVA.Controller
                     //{
                     //   MessageBox.Show("El correo electrónico ya está registrado.", "Usuario registrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //}
-
-                    // Agregar nuevo usuario
+                    
                     context.Usuario.Add(nuevoUsuario);
                     context.SaveChanges();
                     
                     return nuevoUsuario;
                 }
             }
-            catch (DbEntityValidationException ex)
-            {
-                foreach (var validationErrors in ex.EntityValidationErrors)
-                {
-                    foreach (var error in validationErrors.ValidationErrors)
-                    {
-                        Console.WriteLine($"Propiedad: {error.PropertyName}, Error: {error.ErrorMessage}");
-                    }
-                }
-                return null;
-            }
+            //catch (DbEntityValidationException ex)
+            //{
+            //    foreach (var validationErrors in ex.EntityValidationErrors)
+            //    {
+            //        foreach (var error in validationErrors.ValidationErrors)
+            //        {
+            //            Console.WriteLine($"Propiedad: {error.PropertyName}, Error: {error.ErrorMessage}");
+            //        }
+            //    }
+            //    return null;
+            //}
             catch (Exception ex)
             {
                 MessageBox.Show($"Ocurrió un error al registrar el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -108,7 +107,6 @@ namespace ReserVA.Controller
                     return null;
                 }
 
-                MessageBox.Show("Inicio de sesión exitoso.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return usuario;
             }
         }
@@ -117,14 +115,7 @@ namespace ReserVA.Controller
         {
             DialogResult cerrarSesion = MessageBox.Show("¿Estás seguro de que deseas cerrar sesión?", "Cerrar sesión", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-            if (cerrarSesion == DialogResult.Yes)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return cerrarSesion == DialogResult.Yes;
         }
     }
 }

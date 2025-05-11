@@ -21,19 +21,19 @@ namespace ReserVA
             btnRegistrar.Enabled = false;
             btnRegistrar.Text = "Registrando...";
 
-            if (string.IsNullOrWhiteSpace(txtCorreo.Text) && string.IsNullOrWhiteSpace(txtContraseña.Text))
+            if (string.IsNullOrWhiteSpace(tbxCorreo.Text) && string.IsNullOrWhiteSpace(tbxContraseña.Text))
             {
                 MessageBox.Show("Debe introducir un correo y una contraseña.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             
-            if (txtCorreo.Text != txtRepetirCorreo.Text)
+            if (tbxCorreo.Text != tbxRepetirCorreo.Text)
             {
                 MessageBox.Show("Los correos electrónicos no coinciden.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (txtContraseña.Text != txtRepetirContraseña.Text)
+            if (tbxContraseña.Text != tbxRepetirContraseña.Text)
             {
                 MessageBox.Show("Las contraseñas no coinciden.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -41,12 +41,12 @@ namespace ReserVA
 
             Usuario nuevoUsuario = new Usuario()
             {
-                Nombre = txtNombre.Text,
-                Apellidos = txtApellidos.Text,
-                DocumentoIdentidad = txtDocumentoIdentidad.Text,
-                Telefono = txtTelefono.Text,
-                CorreoElectronico = txtCorreo.Text,
-                Contraseña = BCrypt.Net.BCrypt.HashPassword(txtContraseña.Text),
+                Nombre = tbxNombre.Text,
+                Apellidos = tbxApellidos.Text,
+                DocumentoIdentidad = tbxDocumentoIdentidad.Text,
+                Telefono = tbxTelefono.Text,
+                CorreoElectronico = tbxCorreo.Text,
+                Contraseña = BCrypt.Net.BCrypt.HashPassword(tbxContraseña.Text),
                 IdRol = 1
             };
 

@@ -17,6 +17,7 @@ namespace ReserVA
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormInicio());
+            //Application.Run(new FormGestor());
         }
     }
 }

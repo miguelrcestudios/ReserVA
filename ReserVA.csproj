@@ -93,6 +93,7 @@
     <Compile Include="Barrio.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\RecintoController.cs" />
     <Compile Include="Controllers\EspacioController.cs" />
     <Compile Include="Controllers\ReservaController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
@@ -109,6 +110,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DTOs\RecintoDTO.cs" />
+    <Compile Include="Models\DTOs\ReservaDTO.cs" />
     <Compile Include="ReserVAModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -147,42 +150,42 @@
     <Compile Include="Usuario.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Vistas\FormGestor.cs">
+    <Compile Include="Views\FormGestor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Vistas\FormGestor.Designer.cs">
+    <Compile Include="Views\FormGestor.Designer.cs">
       <DependentUpon>FormGestor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Vistas\FormInicio.cs">
+    <Compile Include="Views\FormInicio.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Vistas\FormInicio.Designer.cs">
+    <Compile Include="Views\FormInicio.Designer.cs">
       <DependentUpon>FormInicio.cs</DependentUpon>
     </Compile>
-    <Compile Include="Vistas\FormBase.cs">
+    <Compile Include="Views\FormBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Vistas\FormBase.Designer.cs">
+    <Compile Include="Views\FormBase.Designer.cs">
       <DependentUpon>FormBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Vistas\FormInicioSesion.cs">
+    <Compile Include="Views\FormInicioSesion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Vistas\FormInicioSesion.Designer.cs">
+    <Compile Include="Views\FormInicioSesion.Designer.cs">
       <DependentUpon>FormInicioSesion.cs</DependentUpon>
     </Compile>
-    <Compile Include="Vistas\FormRegistro.cs">
+    <Compile Include="Views\FormRegistro.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Vistas\FormRegistro.Designer.cs">
+    <Compile Include="Views\FormRegistro.Designer.cs">
       <DependentUpon>FormRegistro.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Vistas\FormReserva.cs">
+    <Compile Include="Views\FormReserva.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Vistas\FormReserva.Designer.cs">
+    <Compile Include="Views\FormReserva.Designer.cs">
       <DependentUpon>FormReserva.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
