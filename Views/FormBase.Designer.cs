@@ -74,6 +74,7 @@ namespace ReserVA
             this.btnCerrar.MouseEnter += new EventHandler(this.Button_MouseEnter);
             this.btnCerrar.MouseLeave += new EventHandler(this.Button_MouseLeave);
             this.btnCerrar.BackColor = Settings.Default.ColorVentana;
+            this.btnCerrar.Cursor = Cursors.Hand;
 
             this.btnMinimizar.FlatAppearance.BorderSize = 0;
             this.btnMinimizar.FlatStyle = FlatStyle.Flat;
@@ -86,6 +87,7 @@ namespace ReserVA
             this.btnMinimizar.MouseEnter += new EventHandler(this.Button_MouseEnter);
             this.btnMinimizar.MouseLeave += new EventHandler(this.Button_MouseLeave);
             this.btnMinimizar.BackColor = Settings.Default.ColorVentana;
+            this.btnMinimizar.Cursor = Cursors.Hand;
 
             this.Controls.Add(this.panelSuperior);
             this.FormBorderStyle = FormBorderStyle.None;

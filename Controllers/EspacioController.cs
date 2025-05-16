@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ReserVA.Models;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Windows.Forms;
@@ -14,6 +15,8 @@ namespace ReserVA.Controllers
             {
                 listaEspacios = contexto.Espacio
                     .Include(i => i.Recinto)
+                    .Include(i => i.Recinto.Subzona)
+                    .Include(i => i.Recinto.Subzona.Barrio)
                     .OrderBy(o => o.Recinto.Nombre)
                     .ThenBy(o => o.Nombre)
                     .ToList();
@@ -21,29 +24,43 @@ namespace ReserVA.Controllers
             }
             return listaEspacios;
         }
-        public static List<Espacio> ObtenerFiltrados(int idBarrio)
+
+        public static List<Espacio> ObtenerFiltradosPorBarrio(int idBarrio)
         {
-            List<Espacio> listaEspacios = new List<Espacio>();
             using (var contexto = new ReserVAEntities())
             {
-                List<Subzona> subzonas = contexto.Subzona
-                    .Where(w => w.IdBarrio == idBarrio)                    
-                    .ToList();
+                List<Subzona> subzonas = contexto.Subzona.Where(w => w.IdBarrio == idBarrio).ToList();
+                List<Espacio> listaEspaciosSubzona,listaEspacios = new List<Espacio>();
 
                 foreach (Subzona subzona in subzonas)
                 {
-                    List<Espacio> listaEspaciosSubzona = contexto.Espacio
+                    listaEspaciosSubzona = contexto.Espacio
                         .Include(i => i.Recinto)
+                        .Include(i => i.Recinto.Subzona)
+                        .Include(i => i.Recinto.Subzona.Barrio)
                         .Where(w => w.Recinto.IdSubzona == subzona.IdSubzona)
                         .OrderBy(o => o.Recinto.Nombre)
                         .ThenBy(o => o.Nombre)
                         .ToList();
 
-                    foreach (Espacio espacio in listaEspaciosSubzona)
-                    {
-                        listaEspacios.Add(espacio);
-                    }                    
-                }                
+                    listaEspacios.AddRange(listaEspaciosSubzona);
+                }
+
+                return listaEspacios;
+            }
+        }
+
+        public static List<Espacio> ObtenerFiltradosPorRecinto(int idRecinto)
+        {
+            List<Espacio> listaEspacios;
+            using (var contexto = new ReserVAEntities())
+            {
+                listaEspacios = contexto.Espacio
+                    .Include(i => i.Recinto)
+                    .Where(w => w.IdRecinto == idRecinto)
+                    .OrderBy(o => o.Recinto.Nombre)
+                    .ThenBy(o => o.Nombre)
+                    .ToList();
             }
 
             return listaEspacios;
@@ -101,7 +118,7 @@ namespace ReserVA.Controllers
 
                 if (espacioAEliminar != null)
                 {
-                    bool tieneReservas = contexto.Espacio.Any(e => e.IdEspacio == espacioAEliminar.IdEspacio);
+                    bool tieneReservas = contexto.Reserva.Any(r => r.IdEspacio == espacioAEliminar.IdEspacio);
 
                     if (tieneReservas)
                     {

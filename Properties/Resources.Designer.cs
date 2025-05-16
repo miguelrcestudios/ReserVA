@@ -61,6 +61,42 @@ namespace ReserVA.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a 🔍 Buscar.
+        /// </summary>
+        internal static string Buscar {
+            get {
+                return ResourceManager.GetString("Buscar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ➕ Crear.
+        /// </summary>
+        internal static string Crear {
+            get {
+                return ResourceManager.GetString("Crear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ✏️ Editar.
+        /// </summary>
+        internal static string Editar {
+            get {
+                return ResourceManager.GetString("Editar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a 🗑️ Eliminar.
+        /// </summary>
+        internal static string Eliminar {
+            get {
+                return ResourceManager.GetString("Eliminar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap EscudoAyuntamientoValladolid {
@@ -71,12 +107,30 @@ namespace ReserVA.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a ▼ Filtrar.
+        /// </summary>
+        internal static string Filtrar {
+            get {
+                return ResourceManager.GetString("Filtrar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
         /// </summary>
         internal static System.Drawing.Icon Icono_EscudoAyuntamientoValladolid {
             get {
                 object obj = ResourceManager.GetObject("Icono_EscudoAyuntamientoValladolid", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a 🧹 Limpiar.
+        /// </summary>
+        internal static string Limpiar {
+            get {
+                return ResourceManager.GetString("Limpiar", resourceCulture);
             }
         }
         

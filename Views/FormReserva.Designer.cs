@@ -11,8 +11,8 @@ namespace ReserVA
         private Label lblNombre, lblApellidos, lblDocumentoIdentidad, lblTelefono, lblCorreoElectronico;
         private Label lblNombreEspacio, lblRecinto;
         private Label lblFecha, lblHoraInicio, lblHoraFin;
-        private TextBox txtNombre, txtApellidos, txtDocumentoIdentidad, txtTelefono, txtCorreoElectronico;
-        private TextBox txtNombreEspacio, txtRecinto;
+        private TextBox tbxNombre, tbxApellidos, tbxDocumentoIdentidad, tbxTelefono, tbxCorreoElectronico;
+        private TextBox tbxNombreEspacio, tbxRecinto;
         private DateTimePicker dtpFecha;
         private ComboBox cbxHoraInicio, cbxHoraFin;
         private Button btnReservar;
@@ -22,13 +22,13 @@ namespace ReserVA
         private void InitializeComponent()
         {
             Fecha = DateTime.Today;
-            HoraInicio = DateTime.Now;
-            HoraFin = DateTime.Now.AddHours(1);
+            HoraInicio = DateTime.Now.AddHours(1).AddMinutes(-DateTime.Now.Minute).AddSeconds(-DateTime.Now.Second);
+            HoraFin = HoraInicio.AddHours(1);
 
             // Sección Usuario
             lblUsuario = new Label
             {
-                Text = "Usuario",
+                Text = "👤 Usuario",
                 Location = new Point(50, 60),
                 AutoSize = true,
                 Font = new Font("Trebuchet MS", 12F, FontStyle.Bold)
@@ -40,7 +40,7 @@ namespace ReserVA
                 Location = new Point(50, 90),
                 AutoSize = true
             };
-            txtNombre = new TextBox
+            tbxNombre = new TextBox
             {
                 Location = new Point(50, 110),
                 Width = 200
@@ -52,7 +52,7 @@ namespace ReserVA
                 Location = new Point(300, 90),
                 AutoSize = true
             };
-            txtApellidos = new TextBox
+            tbxApellidos = new TextBox
             { 
                 Location = new Point(300, 110),
                 Width = 200
@@ -64,7 +64,7 @@ namespace ReserVA
                 Location = new Point(50, 150),
                 AutoSize = true
             };
-            txtDocumentoIdentidad = new TextBox
+            tbxDocumentoIdentidad = new TextBox
             {
                 Location = new Point(50, 170),
                 Width = 200
@@ -76,7 +76,7 @@ namespace ReserVA
                 Location = new Point(300, 150),
                 AutoSize = true
             };
-            txtTelefono = new TextBox
+            tbxTelefono = new TextBox
             {
                 Location = new Point(300, 170),
                 Width = 200
@@ -88,7 +88,7 @@ namespace ReserVA
                 Location = new Point(50, 210),
                 AutoSize = true
             };
-            txtCorreoElectronico = new TextBox
+            tbxCorreoElectronico = new TextBox
             {
                 Location = new Point(50, 230),
                 Width = 450
@@ -97,7 +97,7 @@ namespace ReserVA
             // Sección Espacio
             lblEspacio = new Label
             {
-                Text = "Espacio",
+                Text = "🏢 Espacio",
                 Location = new Point(50, 270),
                 AutoSize = true,
                 Font = new Font("Trebuchet MS", 12F, FontStyle.Bold)
@@ -109,7 +109,7 @@ namespace ReserVA
                 Location = new Point(50, 300),
                 AutoSize = true
             };
-            txtNombreEspacio = new TextBox
+            tbxNombreEspacio = new TextBox
             {
                 Location = new Point(50, 320),
                 Width = 200 };
@@ -118,7 +118,7 @@ namespace ReserVA
             { Text = "Recinto",
                 Location = new Point(300, 300), AutoSize = true
             };
-            txtRecinto = new TextBox
+            tbxRecinto = new TextBox
             {
                 Location = new Point(300, 320),
                 Width = 200
@@ -127,7 +127,7 @@ namespace ReserVA
             // Sección Reserva
             lblReserva = new Label
             {
-                Text = "Reserva",
+                Text = "🗓️ Reserva",
                 Location = new Point(50, 360),
                 AutoSize = true,
                 Font = new Font("Trebuchet MS", 12F, FontStyle.Bold)
@@ -157,9 +157,11 @@ namespace ReserVA
             cbxHoraInicio = new ComboBox
             {
                 Location = new Point(50, 470),
-                MaxDropDownItems = 10,
-                Enabled = false
+                FlatStyle = FlatStyle.Flat,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                DropDownHeight = 100,
             };
+            cbxHoraInicio.SelectedValueChanged += CbxHoraInicio_SelectedValueChanged;
 
             lblHoraFin = new Label
             {
@@ -170,13 +172,11 @@ namespace ReserVA
             cbxHoraFin = new ComboBox
             {
                 Location = new Point(300, 470),
-                MaxDropDownItems = 10,
-                Enabled = false
+                FlatStyle = FlatStyle.Flat,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                DropDownHeight = 100,
             };
-
-            //HoraInicio = AjustarBloqueHorario(DateTime.Now);
-            //HoraFin = HoraInicio.AddMinutes(30);
-            //AñadirItemsHoraInicio();
+            cbxHoraFin.SelectedValueChanged += CbxHoraFin_SelectedValueChanged;
 
             btnReservar = new Button
             {
@@ -185,26 +185,27 @@ namespace ReserVA
                 Size = new Size(200, 40),
                 BackColor = Settings.Default.ColorPrimario,
                 ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
             btnReservar.Click += BtnReservar_Click;
             
             //cbxHoraInicio.SelectedIndexChanged += DtpHoraInicio_SelectedIndexChanged;
 
             Controls.Add(lblUsuario);
-            Controls.Add(lblNombre); Controls.Add(txtNombre);
-            Controls.Add(lblApellidos); Controls.Add(txtApellidos);
-            Controls.Add(lblDocumentoIdentidad); Controls.Add(txtDocumentoIdentidad);
-            Controls.Add(lblTelefono); Controls.Add(txtTelefono);
-            Controls.Add(lblCorreoElectronico); Controls.Add(txtCorreoElectronico);
+            Controls.Add(lblNombre); Controls.Add(tbxNombre);
+            Controls.Add(lblApellidos); Controls.Add(tbxApellidos);
+            Controls.Add(lblDocumentoIdentidad); Controls.Add(tbxDocumentoIdentidad);
+            Controls.Add(lblTelefono); Controls.Add(tbxTelefono);
+            Controls.Add(lblCorreoElectronico); Controls.Add(tbxCorreoElectronico);
             Controls.Add(lblEspacio);
-            Controls.Add(lblNombreEspacio); Controls.Add(txtNombreEspacio);
-            Controls.Add(lblRecinto); Controls.Add(txtRecinto);
+            Controls.Add(lblNombreEspacio); Controls.Add(tbxNombreEspacio);
+            Controls.Add(lblRecinto); Controls.Add(tbxRecinto);
             Controls.Add(lblReserva);
             Controls.Add(lblFecha); Controls.Add(dtpFecha);
             Controls.Add(lblHoraInicio); Controls.Add(cbxHoraInicio);
             Controls.Add(lblHoraFin); Controls.Add(cbxHoraFin);
             Controls.Add(btnReservar);
-        }
+        }        
     }
 }

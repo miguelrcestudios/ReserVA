@@ -1,39 +1,35 @@
-﻿using ReserVA.Controllers;
+﻿using ReserVA.Controller;
+using ReserVA.Controllers;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using ReserVA;
 
 namespace ReserVA
 {
     public partial class FormReserva : FormBase
     {
         private Espacio espacio;
-        private Usuario usuario = null;
-
-        public FormReserva()
-        {
-            InitializeComponent();
-            ClientSize = new Size(600, 560);
-            btnMinimizar.Location = new Point(this.ClientSize.Width - 80, 0);
-            btnCerrar.Location = new Point(this.ClientSize.Width - 40, 0);
-        }
+        private Usuario usuario = null;        
         
         public FormReserva(Espacio espacio)
         {
             InitializeComponent();
+            AñadirItemsHoraInicio();
             ClientSize = new Size(600, 560);
             btnMinimizar.Location = new Point(this.ClientSize.Width - 80, 0);
             btnCerrar.Location = new Point(this.ClientSize.Width - 40, 0);
 
             this.espacio = espacio;
 
-            txtNombreEspacio.Text = espacio.Nombre; txtNombreEspacio.Enabled = false;
-            txtRecinto.Text = espacio.Recinto.Nombre; txtRecinto.Enabled = false;
+            tbxNombreEspacio.Text = espacio.Nombre; tbxNombreEspacio.Enabled = false;
+            tbxRecinto.Text = espacio.Recinto.Nombre; tbxRecinto.Enabled = false;
         }
 
         public FormReserva(Espacio espacio, Usuario usuario)
         {
             InitializeComponent();
+            AñadirItemsHoraInicio();
             ClientSize = new Size(600, 560);
             btnMinimizar.Location = new Point(this.ClientSize.Width - 80, 0);
             btnCerrar.Location = new Point(this.ClientSize.Width - 40, 0);
@@ -41,131 +37,129 @@ namespace ReserVA
             this.espacio = espacio;
             this.usuario = usuario;
 
-            txtNombre.Text = usuario.Nombre; txtNombre.Enabled = false;
-            txtApellidos.Text = usuario.Apellidos; txtApellidos.Enabled = false;
-            txtDocumentoIdentidad.Text = usuario.DocumentoIdentidad; txtDocumentoIdentidad.Enabled = false;
-            txtTelefono.Text = usuario.Telefono; txtTelefono.Enabled = false;
-            txtCorreoElectronico.Text = usuario.CorreoElectronico; txtCorreoElectronico.Enabled = false;
+            tbxNombre.Text = usuario.Nombre; tbxNombre.Enabled = false;
+            tbxApellidos.Text = usuario.Apellidos; tbxApellidos.Enabled = false;
+            tbxDocumentoIdentidad.Text = usuario.DocumentoIdentidad; tbxDocumentoIdentidad.Enabled = false;
+            tbxTelefono.Text = usuario.Telefono; tbxTelefono.Enabled = false;
+            tbxCorreoElectronico.Text = usuario.CorreoElectronico; tbxCorreoElectronico.Enabled = false;
 
-            txtNombreEspacio.Text = espacio.Nombre; txtNombreEspacio.Enabled = false;
-            txtRecinto.Text = espacio.Recinto.Nombre; txtRecinto.Enabled = false;
+            tbxNombreEspacio.Text = espacio.Nombre; tbxNombreEspacio.Enabled = false;
+            tbxRecinto.Text = espacio.Recinto.Nombre; tbxRecinto.Enabled = false;
         }
 
         private void BtnReservar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtCorreoElectronico.Text))
+            if (string.IsNullOrWhiteSpace(tbxNombre.Text) || string.IsNullOrWhiteSpace(tbxApellidos.Text)
+                && string.IsNullOrWhiteSpace(tbxDocumentoIdentidad.Text) || string.IsNullOrWhiteSpace(tbxTelefono.Text)
+                && string.IsNullOrWhiteSpace(tbxCorreoElectronico.Text))
             {
-                MessageBox.Show("Debe introducir un correo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);                
+                MessageBox.Show("Debe rellenar todos los campos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string documento = UsuarioController.ValidarDocumentoIdentidad(tbxDocumentoIdentidad.Text);
+            if (documento != null)
+            {
+                MessageBox.Show($"El {documento} no es válido. Solo se acepta DNI, NIE o pasaporte español.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!UsuarioController.ValidarFormatoEmail(tbxCorreoElectronico.Text))
+            {
+                MessageBox.Show($"El formato del email no es valido.\nEjemplo: nombre@domino.com", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (Fecha < DateTime.Today)
+            {
+                MessageBox.Show("La fecha de la reserva es anterior a la fecha actual.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            
+            if (HoraFin < HoraInicio)
+            {
+                MessageBox.Show("La hora de finalización de la reserva es anterior a la hora de inicio.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
             if (usuario == null)
             {
                 Usuario nuevoUsuario = new Usuario()
                 {
-                    Nombre = txtNombre.Text,
-                    Apellidos = txtApellidos.Text,
-                    DocumentoIdentidad = txtDocumentoIdentidad.Text,
-                    Telefono = txtTelefono.Text,
-                    CorreoElectronico = txtCorreoElectronico.Text,
+                    Nombre = tbxNombre.Text,
+                    Apellidos = tbxApellidos.Text,
+                    DocumentoIdentidad = tbxDocumentoIdentidad.Text,
+                    Telefono = tbxTelefono.Text,
+                    CorreoElectronico = tbxCorreoElectronico.Text,
                     Contraseña = null,
                     IdRol = 1
                 };
                 usuario = nuevoUsuario;
             }
 
-            Reserva reserva = ReservaController.Reservar(espacio, usuario, dtpFecha.Value);
-            if (reserva == null)
+            Reserva reserva = ReservaController.Reservar(espacio, usuario, Fecha, HoraInicio, HoraFin);
+            if (reserva != null)
             {
-                //MessageBox.Show($"Se ha producido un error y su reserva no se ha realizado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                MessageBox.Show($"Reserva realizada correctamente. Su reserva es la número {reserva.IdReserva}.", "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Reserva realizada correctamente.\nSu reserva en {espacio.Nombre} es la número {reserva.IdReserva}.", "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);               
                 Close();
             }
-        }
-
-        private void DtpHoraInicio_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            DateTime horaConvertida = DateTime.ParseExact(cbxHoraInicio.SelectedItem.ToString(), "HH:mm", null);
-
-
-            //HoraInicio = new DateTime(Fecha.Year, Fecha.Month, Fecha.Day, horaConvertida.Hour, horaConvertida.Minute, 0);
-            //HoraFin.AddMinutes(30);
-            //AñadirItemsHoraFin();
-        }
+        }        
 
         private void AñadirItemsHoraInicio()
-           {
-            while (HoraInicio <= Fecha.AddHours(21).AddMinutes(30))
+        {
+            DateTime horaInicio = HoraInicio;
+
+            cbxHoraInicio.Items.Clear();
+            while (horaInicio < Fecha.AddHours(22))
             {
-                cbxHoraInicio.Items.Add(HoraInicio.ToString("HH:mm"));
-                HoraFin = HoraInicio.AddMinutes(30);
+                cbxHoraInicio.Items.Add(horaInicio.ToString("HH:mm"));
+                horaInicio = horaInicio.AddHours(1);
             }
             cbxHoraInicio.SelectedIndex = 0;
-            AñadirItemsHoraFin() ;
+            AñadirItemsHoraFin();
         }
 
         private void AñadirItemsHoraFin()
         {
-            while (HoraFin <= Fecha.AddHours(22))
+            DateTime horaFin = HoraFin;
+
+            cbxHoraFin.Items.Clear();
+            while (horaFin < Fecha.AddHours(23))
             {
-                cbxHoraFin.Items.Add(HoraFin.ToString("HH:mm"));
-                HoraFin = HoraFin.AddMinutes(30);
-            }
-            if (cbxHoraFin.Items.Count > 1) 
-            {
-                cbxHoraFin.SelectedIndex = 1; 
-            }
-            else if (cbxHoraFin.Items.Count == 1)
-            {
-                cbxHoraFin.SelectedIndex = 0;
+                cbxHoraFin.Items.Add(horaFin.ToString("HH:mm"));
+                horaFin = horaFin.AddHours(1);
             }            
+            cbxHoraFin.SelectedIndex = 0;
         }
 
         private void DtpFecha_ValueChanged(object sender, EventArgs e)
         {
-            Fecha = new DateTime(dtpFecha.Value.Year, dtpFecha.Value.Month, dtpFecha.Value.Day);
+            Fecha = dtpFecha.Value.Date;
 
-            if (Fecha < DateTime.Today)
+            if (Fecha == DateTime.Today)
             {
-                Fecha = DateTime.Today;
+                HoraInicio = DateTime.Now.AddHours(1).AddMinutes(-DateTime.Now.Minute).AddSeconds(-DateTime.Now.Second);
             }
-
-            //if (Fecha == DateTime.Today)
-            //{
-            //    HoraInicio = AjustarBloqueHorario(DateTime.Now);
-            //}
-            //else
-            //{
-            //    HoraInicio = Fecha.AddHours(8); 
-            //}
-            //HoraFin = Fecha.AddHours(HoraInicio.Hour).AddMinutes(HoraInicio.Minute + 30);
-
-            dtpFecha.Value = Fecha;
-            //cbxHoraInicio.Items.Clear();
-            //cbxHoraFin.Items.Clear();
-            //AñadirItemsHoraInicio();
+            else
+            {
+                HoraInicio = Fecha.AddHours(8);
+            }
+            HoraFin = HoraInicio.AddHours(1);
+            
+            AñadirItemsHoraInicio();
         }
 
-        private DateTime AjustarBloqueHorario(DateTime fechaHora)
+        private void CbxHoraInicio_SelectedValueChanged(object sender, EventArgs e)
         {
-            int hora = fechaHora.Hour;
-            int minutos = fechaHora.Minute < 30 ? 30 : 0;
-            if (minutos == 0) { hora++; }
-
-
-            if (fechaHora > DateTime.Today.AddHours(21).AddMinutes(30))
-            {                
-                return new DateTime(fechaHora.Year, fechaHora.Month, fechaHora.Day + 1, 8, 0, 0);
-            }
-
-            if (fechaHora < DateTime.Today.AddHours(8))
-            {
-                return new DateTime(fechaHora.Year, fechaHora.Month, fechaHora.Day, 8, 0, 0);
-            }
-
-            return new DateTime(fechaHora.Year, fechaHora.Month, fechaHora.Day, hora, minutos, 0);
+            DateTime horaSeleccionada = DateTime.ParseExact(cbxHoraInicio.SelectedItem.ToString(), "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+            HoraInicio = Fecha.AddHours(horaSeleccionada.Hour);
+            HoraFin = HoraInicio.AddHours(1);
+            AñadirItemsHoraFin();
+        }
+        private void CbxHoraFin_SelectedValueChanged(object sender, EventArgs e)
+        {
+            DateTime horaSeleccionada = DateTime.ParseExact(cbxHoraFin.SelectedItem.ToString(), "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+            HoraFin = Fecha.AddHours(horaSeleccionada.Hour);
         }
     }
 }

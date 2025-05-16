@@ -1,4 +1,5 @@
-﻿using ReserVA.Controller;
+﻿using ReserVA.Models;
+using ReserVA.Controller;
 using ReserVA.Controllers;
 using ReserVA.Properties;
 using System;
@@ -6,13 +7,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Numerics;
 
 namespace ReserVA
 {
     public partial class FormInicio : FormBase
     {
         public Usuario Usuario { get; set; } = null;
-
 
         public FormInicio()
         {
@@ -34,6 +35,7 @@ namespace ReserVA
                         Form gestor = new FormGestor(Usuario);
                         gestor.FormClosed += (s, args) =>
                         {
+                            CargarEspacios(-1);
                             Show();
                             
                             Usuario = null;
@@ -45,12 +47,20 @@ namespace ReserVA
                         gestor.Show();
                     }
 
-                    var nombreYApellido = (formInicioSesion.Usuario.Nombre + " " + formInicioSesion.Usuario.Apellidos).Substring(0, 10).Length > 10
-                    ? (formInicioSesion.Usuario.Nombre + " " + formInicioSesion.Usuario.Apellidos).Substring(0, 10) + "..."
+                    var nombreYApellido = (formInicioSesion.Usuario.Nombre + " " + formInicioSesion.Usuario.Apellidos).Length > 18
+                    ? (formInicioSesion.Usuario.Nombre + " " + formInicioSesion.Usuario.Apellidos).Substring(0, 15) + "..."
                     : (formInicioSesion.Usuario.Nombre + " " + formInicioSesion.Usuario.Apellidos);
 
                     btnIniciarSesion.Text = "👤 " + nombreYApellido;
                     formInicioSesion.Close();
+
+                    if (Usuario != null && Usuario.IdRol == 1)
+                    {
+                        tabControlUsuario.TabPages.Add(tabPageProximasReservas);
+                        tabControlUsuario.TabPages.Add(tabPageHistorialReservas);
+                        CargarProximasReservas();
+                        CargarHistorialReservas();
+                    }
 
                     btnIniciarSesion.Click -= BtnIniciarSesion_IniciarSesion_Click;
                     btnIniciarSesion.Click += BtnIniciarSesion_CerrarSesion_Click;                    
@@ -67,13 +77,15 @@ namespace ReserVA
                 btnIniciarSesion.Text = "👤 Iniciar sesión";
                 btnIniciarSesion.Click -= BtnIniciarSesion_CerrarSesion_Click;
                 btnIniciarSesion.Click += BtnIniciarSesion_IniciarSesion_Click;
+                tabControlUsuario.TabPages.Remove(tabPageProximasReservas);
+                tabControlUsuario.TabPages.Remove(tabPageHistorialReservas);
             }
         }
         
         private void BtnFiltrar_Click(object sender, EventArgs e)
         {
             var barrioSeleccionado = cbxFiltroBarrios.SelectedItem as dynamic;
-            int idBarrioSeleccionado = barrioSeleccionado != null ? barrioSeleccionado.Id : -1;
+            int idBarrioSeleccionado = barrioSeleccionado != null ? barrioSeleccionado.IdBarrio : -1;
             
             CargarEspacios(idBarrioSeleccionado);
         }
@@ -93,7 +105,14 @@ namespace ReserVA
                 {
                     reserva = new FormReserva(espacio, Usuario);
                 }
-
+                reserva.FormClosed += (s, args) =>
+                {
+                    if (Usuario != null && Usuario.IdRol == 1)
+                    {
+                        CargarProximasReservas();
+                        CargarHistorialReservas();
+                    };
+                };
                 reserva.ShowDialog();
             }            
         }
@@ -102,25 +121,21 @@ namespace ReserVA
         {
             using (var context = new ReserVAEntities())
             {
-                var barrioVacio = new { Id = -1, Nombre = "" };
+                var barrioVacio = new BarrioDTO { IdBarrio = -1, Nombre = "" };
 
                 var barrios = context.Barrio
-                    .Select(s => new
+                    .Select(s => new BarrioDTO
                     {
-                        Id = s.IdBarrio,
+                        IdBarrio = s.IdBarrio,
                         Nombre =  s.Nombre
                     })
                     .OrderBy(o => o.Nombre)
                     .ToList();
 
                 barrios.Insert(0, barrioVacio);
-                foreach (var barrio in barrios)
-                {
-                    cbxFiltroBarrios.Items.Add(barrio);
-                }
+                cbxFiltroBarrios.DataSource = barrios;
                 cbxFiltroBarrios.DisplayMember = "Nombre";
-                cbxFiltroBarrios.ValueMember = "Id";
-                cbxFiltroBarrios.SelectedItem = null;
+                cbxFiltroBarrios.ValueMember = "IdBarrio";
             }
         }
 
@@ -136,15 +151,16 @@ namespace ReserVA
             }
             else
             {
-                espacios = EspacioController.ObtenerFiltrados(idBarrio);
+                espacios = EspacioController.ObtenerFiltradosPorBarrio(idBarrio);
             }
 
             foreach (var espacio in espacios)
             {
-                var panel = new Panel
+                int tamanoDescripcion = (int)Math.Ceiling((double)espacio.Descripcion.Length / 200);
+
+                var panelEspacio = new Panel
                 {
-                    Width = panelRecintos.ClientSize.Width - 30,
-                    Height = 100,
+                    Size = new Size (panelRecintos.ClientSize.Width - 30, 60 + (tamanoDescripcion * 20)),
                     BackColor = Color.White,
                     Margin = new Padding(5),
                     Padding = new Padding(10),
@@ -156,58 +172,74 @@ namespace ReserVA
                     Text = "Reservar",
                     Font = new Font("Trebuchet MS", 10F, FontStyle.Bold),
                     Size = new Size(120, 40),
-                    Location = new Point(panel.Width - 140, (panel.Height / 2) - 20),
+                    Location = new Point(panelEspacio.Width - 140, 10),
                     BackColor = Settings.Default.ColorPrimario,
                     ForeColor = Color.White,
                     FlatStyle = FlatStyle.Flat,
-                    FlatAppearance = { BorderSize = 0 },
-                    //Anchor = AnchorStyles.Right | AnchorStyles.Top,
+                    Cursor = Cursors.Hand,
                     Tag = espacio
                 };
                 btnReservar.Click += BtnReserva_Click;
 
                 var lblNombre = new Label
                 {
-                    Text = espacio.Nombre + " (" + espacio.Recinto.Nombre + ")",
+                    Text = $"{espacio.Nombre} ({espacio.Recinto.Nombre})",
                     Font = new Font("Trebuchet MS", 12F, FontStyle.Bold),
-                    AutoSize = false,
-                    Height = 25,
-                    Width = panel.Width - btnReservar.Width - 20,
+                    Location = new Point(10, 10),
+                    Size = new Size(panelEspacio.ClientSize.Width - btnReservar.Width - 20, 25),
                     Dock = DockStyle.Top
                 };
 
-                var lblTipo = new Label
+                var lblTipoSubzona = new Label
                 {
-                    Text = espacio.Tipo,
+                    Text = $"{espacio.Tipo} \t|\t {espacio.Recinto.Subzona.Nombre} ({espacio.Recinto.Subzona.Barrio.Nombre})",
                     Font = new Font("Trebuchet MS", 10F, FontStyle.Regular),
-                    ForeColor = Color.Gray,
-                    AutoSize = false,
-                    Height = 20,
-                    Width = panel.Width - btnReservar.Width - 20,
+                    Location = new Point(10, 40),
+                    Size = new Size(panelEspacio.ClientSize.Width - btnReservar.Width - 20, 20),
                     Dock = DockStyle.Top
                 };
-
-                var descripcionReducida = espacio.Descripcion?.Length > 150
-                    ? espacio.Descripcion.Substring(0, 150) + "..."
-                    : espacio.Descripcion;
 
                 var lblDescripcion = new Label
                 {
-                    Text = descripcionReducida,
+                    Text = espacio.Descripcion,
                     Font = new Font("Trebuchet MS", 9F, FontStyle.Regular),
-                    ForeColor = Color.DimGray,
-                    AutoSize = false,
-                    Height = 40,
-                    Width = panel.Width - btnReservar.Width - 20,
+                    ForeColor = Settings.Default.ColorVentanaHover,
+                    Location = new Point(10, 70),
+                    Margin = new Padding(0, 5, 160, 0),
+                    Size = new Size(panelEspacio.ClientSize.Width - btnReservar.ClientSize.Width * 2 - 20, tamanoDescripcion * 20),
                     Dock = DockStyle.Top
                 };
 
-                panel.Controls.Add(btnReservar);
-                panel.Controls.Add(lblDescripcion);
-                panel.Controls.Add(lblTipo);
-                panel.Controls.Add(lblNombre);
+                panelEspacio.Controls.Add(btnReservar);
+                panelEspacio.Controls.Add(lblDescripcion);
+                panelEspacio.Controls.Add(lblTipoSubzona);
+                panelEspacio.Controls.Add(lblNombre);
 
-                panelRecintos.Controls.Add(panel);
+                panelRecintos.Controls.Add(panelEspacio);
+            }
+        }
+
+        public void CargarProximasReservas()
+        {
+            List<ReservaDTO> reservas = ReservaController.ObtenerProximas(Usuario.IdUsuario);          
+
+            dgvProximasReservas.Rows.Clear();
+
+            foreach (var espacio in reservas)
+            {
+                dgvProximasReservas.Rows.Add(espacio.NumeroReserva, espacio.Fecha, espacio.HoraInicio, espacio.HoraFin, espacio.Espacio, espacio.Recinto);
+            }
+        }
+        
+        public void CargarHistorialReservas()
+        {
+            List<ReservaDTO> reservas = ReservaController.ObtenerHistorial(Usuario.IdUsuario);          
+
+            dgvHistoriaReservas.Rows.Clear();
+
+            foreach (var espacio in reservas)
+            {
+                dgvHistoriaReservas.Rows.Add(espacio.NumeroReserva, espacio.Fecha, espacio.HoraInicio, espacio.HoraFin, espacio.Espacio, espacio.Recinto);
             }
         }
     }

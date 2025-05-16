@@ -7,7 +7,7 @@ namespace ReserVA
     partial class FormRegistro
     {
         private Label lblNombre, lblApellidos, lblDocumentoIdentidad, lblTelefono, lblCorreo, lblRepetirCorreo, lblContraseña, lblRepetirContraseña;
-        private TextBox tbxNombre, tbxApellidos, tbxDocumentoIdentidad, tbxTelefono, tbxCorreo, tbxRepetirCorreo, tbxContraseña, tbxRepetirContraseña;
+        private TextBox tbxNombre, tbxApellidos, tbxDocumentoIdentidad, tbxTelefono, tbxCorreoElectronico, tbxRepetirCorreoElectronico, tbxContrasena, tbxRepetirContraseña;
         private Button btnRegistrar;
 
         private void InitializeComponent()
@@ -45,7 +45,8 @@ namespace ReserVA
             tbxDocumentoIdentidad = new TextBox
             {
                 Location = new Point(50, 170),
-                Width = 200
+                Width = 200,
+                MaxLength = 9
             };
 
             lblTelefono = new Label
@@ -57,7 +58,8 @@ namespace ReserVA
             tbxTelefono = new TextBox
             {
                 Location = new Point(300, 170),
-                Width = 200
+                Width = 200,
+                MaxLength = 9,
             };
 
             lblCorreo = new Label
@@ -66,7 +68,7 @@ namespace ReserVA
                 Location = new Point(50, 220),
                 AutoSize = true
             };
-            tbxCorreo = new TextBox
+            tbxCorreoElectronico = new TextBox
             {
                 Location = new Point(50, 240),
                 Width = 200
@@ -78,7 +80,7 @@ namespace ReserVA
                 Location = new Point(300, 220),
                 AutoSize = true
             };
-            tbxRepetirCorreo = new TextBox
+            tbxRepetirCorreoElectronico = new TextBox
             {
                 Location = new Point(300, 240),
                 Width = 200
@@ -90,7 +92,7 @@ namespace ReserVA
                 Location = new Point(50, 290),
                 AutoSize = true
             };
-            tbxContraseña = new TextBox
+            tbxContrasena = new TextBox
             {
                 Location = new Point(50, 310),
                 Width = 200,
@@ -101,13 +103,13 @@ namespace ReserVA
             {
                 Text = "Repetir contraseña",
                 Location = new Point(300, 290),
-                AutoSize = true
+                AutoSize = true,
             };
             tbxRepetirContraseña = new TextBox
             {
                 Location = new Point(300, 310),
                 Width = 200,
-                UseSystemPasswordChar = true
+                UseSystemPasswordChar = true,
             };
             
             btnRegistrar = new Button
@@ -117,7 +119,8 @@ namespace ReserVA
                 Size = new Size(200, 40),
                 BackColor = Settings.Default.ColorPrimario,
                 ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand,
             };
             btnRegistrar.Click += BtnRegistrar_Click;
                         
@@ -125,9 +128,9 @@ namespace ReserVA
             Controls.Add(lblApellidos); Controls.Add(tbxApellidos);
             Controls.Add(lblDocumentoIdentidad); Controls.Add(tbxDocumentoIdentidad);
             Controls.Add(lblTelefono); Controls.Add(tbxTelefono);
-            Controls.Add(lblCorreo); Controls.Add(tbxCorreo);
-            Controls.Add(lblRepetirCorreo); Controls.Add(tbxRepetirCorreo);
-            Controls.Add(lblContraseña); Controls.Add(tbxContraseña);
+            Controls.Add(lblCorreo); Controls.Add(tbxCorreoElectronico);
+            Controls.Add(lblRepetirCorreo); Controls.Add(tbxRepetirCorreoElectronico);
+            Controls.Add(lblContraseña); Controls.Add(tbxContrasena);
             Controls.Add(lblRepetirContraseña); Controls.Add(tbxRepetirContraseña);
             Controls.Add(btnRegistrar);
         }

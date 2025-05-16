@@ -7,8 +7,8 @@ namespace ReserVA
 {
     public partial class FormInicioSesion : FormBase
     {
-        private Label lblUsuario, lblContrasena;
-        private TextBox tbxUsuario, tbxContrasena;
+        private Label lblUsuario, lblContraseña;
+        private TextBox tbxUsuario, tbxContraseña;
         private Button btnIniciarSesion, btnRegistro;
 
         private void InitializeComponent()
@@ -29,13 +29,13 @@ namespace ReserVA
                 Width = 200 
             };
 
-            lblContrasena = new Label 
+            lblContraseña = new Label 
             { 
                 Text = "Contraseña", 
                 Location = new System.Drawing.Point(100, 125), 
                 Width = 200 
             };
-            tbxContrasena = new TextBox 
+            tbxContraseña = new TextBox 
             { 
                 Location = new System.Drawing.Point(100, 150), 
                 Width = 200, 
@@ -49,7 +49,8 @@ namespace ReserVA
                 Size = new Size(200, 40),
                 BackColor = Settings.Default.ColorPrimario,
                 ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand,
             };
             btnIniciarSesion.Click += BtnIniciarSesion_Click;
 
@@ -60,12 +61,13 @@ namespace ReserVA
                 Size = new Size(200, 40),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand,
             };
             btnRegistro.Click += BtnRegistro_Click;
 
             Controls.Add(lblUsuario); Controls.Add(tbxUsuario);
-            Controls.Add(lblContrasena); Controls.Add(tbxContrasena);
+            Controls.Add(lblContraseña); Controls.Add(tbxContraseña);
             Controls.Add(btnIniciarSesion);
             Controls.Add(btnRegistro);
         }

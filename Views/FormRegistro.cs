@@ -20,22 +20,75 @@ namespace ReserVA
         {
             btnRegistrar.Enabled = false;
             btnRegistrar.Text = "Registrando...";
+            btnRegistrar.Cursor = Cursors.WaitCursor;
 
-            if (string.IsNullOrWhiteSpace(tbxCorreo.Text) && string.IsNullOrWhiteSpace(tbxContraseña.Text))
+            if (string.IsNullOrWhiteSpace(tbxNombre.Text) || string.IsNullOrWhiteSpace(tbxApellidos.Text)
+                || string.IsNullOrWhiteSpace(tbxDocumentoIdentidad.Text) || string.IsNullOrWhiteSpace(tbxTelefono.Text)
+                || string.IsNullOrWhiteSpace(tbxCorreoElectronico.Text) || string.IsNullOrWhiteSpace(tbxContrasena.Text))
             {
-                MessageBox.Show("Debe introducir un correo y una contraseña.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Debe rellenar todos los campos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnRegistrar.Enabled = true;
+                btnRegistrar.Text = "Registrar";
+                btnRegistrar.Cursor = Cursors.Hand;
+                return;
+            }
+
+            string documento = UsuarioController.ValidarDocumentoIdentidad(tbxDocumentoIdentidad.Text);
+            if (documento != null) {
+                MessageBox.Show($"El {documento} no es válido.\nSolo se acepta DNI, NIE o pasaporte español.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnRegistrar.Enabled = true;
+                btnRegistrar.Text = "Registrar";
+                btnRegistrar.Cursor = Cursors.Hand;
+                return;
+            }
+
+            if (!UsuarioController.ValidarFormatoTelefono(tbxTelefono.Text))
+            {
+                MessageBox.Show($"El número de teléfono no es valido.\nEjemplo: 600112233", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnRegistrar.Enabled = true;
+                btnRegistrar.Text = "Registrar";
+                btnRegistrar.Cursor = Cursors.Hand;
+                return;
+            }
+
+            if (!UsuarioController.ValidarFormatoEmail(tbxCorreoElectronico.Text))
+            {
+                MessageBox.Show($"El formato del email no es valido.\nEjemplo: nombre@domino.com", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnRegistrar.Enabled = true;
+                btnRegistrar.Text = "Registrar";
+                btnRegistrar.Cursor = Cursors.Hand;
+                return;
+            }
+
+            if (!UsuarioController.ValidarFormatoContrasena(tbxContrasena.Text))
+            {
+                MessageBox.Show($"La contraseña debe cumplir los siguientes requisitos mínimos:\n" +
+                                $"- Longitud mínima de 6 caracteres\n" +
+                                $"- Una minúscula\n" +
+                                $"- Una mayúscula\n" +
+                                $"- Un dígito o símbolo",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnRegistrar.Enabled = true;
+                btnRegistrar.Text = "Registrar";
+                btnRegistrar.Cursor = Cursors.Hand;
                 return;
             }
             
-            if (tbxCorreo.Text != tbxRepetirCorreo.Text)
+            if (!tbxCorreoElectronico.Text.Equals(tbxRepetirCorreoElectronico.Text))
             {
                 MessageBox.Show("Los correos electrónicos no coinciden.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnRegistrar.Enabled = true;
+                btnRegistrar.Text = "Registrar";
+                btnRegistrar.Cursor = Cursors.Hand;
                 return;
             }
 
-            if (tbxContraseña.Text != tbxRepetirContraseña.Text)
+            if (!tbxContrasena.Text.Equals(tbxRepetirContraseña.Text))
             {
                 MessageBox.Show("Las contraseñas no coinciden.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnRegistrar.Enabled = true;
+                btnRegistrar.Text = "Registrar";
+                btnRegistrar.Cursor = Cursors.Hand;
                 return;
             }
 
@@ -45,8 +98,8 @@ namespace ReserVA
                 Apellidos = tbxApellidos.Text,
                 DocumentoIdentidad = tbxDocumentoIdentidad.Text,
                 Telefono = tbxTelefono.Text,
-                CorreoElectronico = tbxCorreo.Text,
-                Contraseña = BCrypt.Net.BCrypt.HashPassword(tbxContraseña.Text),
+                CorreoElectronico = tbxCorreoElectronico.Text,
+                Contraseña = BCrypt.Net.BCrypt.HashPassword(tbxContrasena.Text),
                 IdRol = 1
             };
 
@@ -60,6 +113,7 @@ namespace ReserVA
             {
                 btnRegistrar.Enabled = true;
                 btnRegistrar.Text = "Registrar";
+                btnRegistrar.Cursor = Cursors.Hand;
             }
         }
     }

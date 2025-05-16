@@ -117,12 +117,30 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Buscar" xml:space="preserve">
+    <value>🔍 Buscar</value>
+  </data>
+  <data name="Crear" xml:space="preserve">
+    <value>➕ Crear</value>
+  </data>
+  <data name="Editar" xml:space="preserve">
+    <value>✏️ Editar</value>
+  </data>
+  <data name="Eliminar" xml:space="preserve">
+    <value>🗑️ Eliminar</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="EscudoAyuntamientoValladolid" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Escudo_AyuntamientoValladolid.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Filtrar" xml:space="preserve">
+    <value>▼ Filtrar</value>
+  </data>
   <data name="Icono_EscudoAyuntamientoValladolid" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icono_EscudoAyuntamientoValladolid.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Limpiar" xml:space="preserve">
+    <value>🧹 Limpiar</value>
   </data>
   <data name="Título" xml:space="preserve">
     <value>ReserVA</value>

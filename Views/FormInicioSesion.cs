@@ -21,19 +21,39 @@ namespace ReserVA
         {
             btnIniciarSesion.Enabled = false;
             btnIniciarSesion.Text = "Iniciando sesión...";
+            btnIniciarSesion.Cursor = Cursors.WaitCursor;
 
-            Usuario usuarioIniciado = UsuarioController.IniciarSesion(tbxUsuario.Text, tbxContrasena.Text);
+            if (string.IsNullOrWhiteSpace(tbxUsuario.Text) || string.IsNullOrWhiteSpace(tbxContraseña.Text))
+            {
+                MessageBox.Show("Debe rellenar los campos usuario y contraseña.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnIniciarSesion.Enabled = true;
+                btnIniciarSesion.Text = "Iniciar sesión";
+                btnIniciarSesion.Cursor = Cursors.Hand;
+                return;
+            }
+
+            if (!UsuarioController.ValidarFormatoEmail(tbxUsuario.Text))
+            {
+                MessageBox.Show($"El formato del email no es valido.\nEjemplo: nombre@domino.com", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnIniciarSesion.Enabled = true;
+                btnIniciarSesion.Text = "Iniciar sesión";
+                btnIniciarSesion.Cursor = Cursors.Default;
+                return;
+            }
+
+            Usuario usuarioIniciado = UsuarioController.IniciarSesion(tbxUsuario.Text, tbxContraseña.Text);
 
             if (usuarioIniciado != null)
             {
                 Usuario = usuarioIniciado;
                 DialogResult = DialogResult.OK;
-                Hide();
+                Close();
             }
             else
             {
                 btnIniciarSesion.Enabled = true;
                 btnIniciarSesion.Text = "Iniciar sesión";
+                btnIniciarSesion.Cursor = Cursors.Default;
             }
         }
 

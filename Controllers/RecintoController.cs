@@ -1,4 +1,4 @@
-﻿using RerserVA.Models;
+﻿using ReserVA.Models;
 using ReserVA;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Windows.Forms;
 
-namespace RerserVA.Controllers
+namespace ReserVA.Controllers
 {
     public static class RecintoController
     {
@@ -33,22 +33,22 @@ namespace RerserVA.Controllers
         }
         public static List<RecintoDTO> ObtenerFiltrados(int idBarrio)
         {
-            List<RecintoDTO> listaRecintos = new List<RecintoDTO>();
             using (var contexto = new ReserVAEntities())
             {
                 List<Subzona> subzonas = contexto.Subzona.Where(w => w.IdBarrio == idBarrio).ToList();
+                List<RecintoDTO> listaRecintosSubzona, listaRecintos = new List<RecintoDTO>();
 
                 foreach (Subzona subzona in subzonas)
                 {
-                    List<RecintoDTO> listaRecintosSubzona = contexto.Recinto
+                    listaRecintosSubzona = contexto.Recinto
                         .Include(i => i.Subzona)
                         .Include(i => i.Subzona.Barrio)
                         .Select(r => new
                         {
-                            IdRecinto = r.IdRecinto,
-                            Nombre = r.Nombre,
-                            Direccion = r.Direccion,
-                            IdSubzona = r.IdSubzona,
+                            r.IdRecinto,
+                            r.Nombre,
+                            r.Direccion,
+                            r.IdSubzona,
                             Subzona = r.Subzona.Nombre,
                             Barrio = r.Subzona.Barrio.Nombre
                         })
@@ -66,14 +66,10 @@ namespace RerserVA.Controllers
                         })
                         .ToList();
 
-                    foreach (RecintoDTO recinto in listaRecintosSubzona)
-                    {
-                        listaRecintos.Add(recinto);
-                    }
+                    listaRecintos.AddRange(listaRecintosSubzona);
                 }
+                return listaRecintos;
             }
-
-            return listaRecintos;
         }
 
         public static bool CrearRecinto(Recinto recinto)

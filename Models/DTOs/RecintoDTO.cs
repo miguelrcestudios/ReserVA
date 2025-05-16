@@ -1,4 +1,4 @@
-﻿namespace RerserVA.Models
+﻿namespace ReserVA.Models
 {
     public class RecintoDTO
     {

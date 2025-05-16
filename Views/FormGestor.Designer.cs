@@ -6,14 +6,18 @@ namespace ReserVA
 {
     partial class FormGestor
     {
-        private TabControl tabControl;
-        private TabPage tabReservas, tabRecintos, tabEspacios, tabGestores;
+        private TabControl tabControlGestor;
+        private TabPage tabPageReservas, tabPageRecintos, tabPageEspacios, tabPageGestores;
 
-        private Button btnIniciarSesion, btnFiltrarReservas, btnFiltrarRecintos, btnFiltrarEspacios, btnCrear_Recinto, btnEditar_Recinto, btnEliminar_Recinto, btnRestablecer_Recinto, btnCrearEspacio, btnEditarEspacio, btnEliminarEspacio, btnRestablecerEspacio;
-        private Label lblFiltroRecinto_Reservas, lblFiltroBarrio_Recintos, lblNombre_Recinto, lblDireccion_Recinto, lblSubzona_Recinto, lblFiltroRecinto_Espacios, lblNombreEspacio, lblTipoEspacio, lblDescripcionEspacio, lblRecintoEspacio;
+        private Button btnIniciarSesion, btnFiltrarReservas, btnFiltrarRecintos, btnFiltrarEspacios, btnBuscarGestores, btnCrearRecinto, btnEditarRecinto, btnEliminarRecinto, btnLimpiarCamposRecinto,
+            btnCrearEspacio, btnEditarEspacio, btnEliminarEspacio, btnLimpiarCamposEspacio, btnCrearGestor, btnEditarGestor, btnEliminarGestor, btnLimpiarCamposGestor;
+        private Label lblFiltroRecinto_Reservas, lblFiltroBarrio_Recintos, lblNombre_Recinto, lblDireccion_Recinto, lblSubzona_Recinto,
+            lblFiltroRecinto_Espacios, lblNombreEspacio,lblTipoEspacio, lblDescripcionEspacio, lblRecintoEspacio,
+            lblFiltroGestores, lblNombreGestor, lblApellidosGestor, lblDocumentoIdentidadGestor, lblTelefonoGestor, lblCorreoElectronicoGestor, lblContraseñaGestor;
         private ComboBox cbxFiltroRecinto_Reservas, cbxFiltroBarrio_Recintos, cbxSubzona_Recinto, cbxFiltroRecinto_Espacios, cbxRecintoEspacio;
-        private DataGridView dgvReservas, dgvRecintos, dgvEspacios;
-        private TextBox tbxNombreRecinto, tbxDireccionRecinto, tbxNombreEspacio, tbxTipoEspacio, tbxDescripcionEspacio;
+        private DataGridView dgvReservas, dgvRecintos, dgvEspacios, dgvGestores;
+        private TextBox tbxNombreRecinto, tbxDireccionRecinto, tbxNombreEspacio, tbxTipoEspacio, tbxDescripcionEspacio,
+            tbxFiltroGestores, tbxNombreGestor, tbxApellidosGestor, tbxDocumentoIdentidadGestor, tbxTelefonoGestor, tbxCorreoElectronicoGestor, tbxContrasenaGestor;
 
         private void InitializeComponent()
         {
@@ -33,32 +37,33 @@ namespace ReserVA
                 Location = new Point(this.Width - 240, 0),
                 TextAlign = ContentAlignment.MiddleCenter,
                 Text = "👤 Iniciar sesión",
+                Cursor = Cursors.Hand
             };
 
             panelSuperior.Controls.Add(this.btnIniciarSesion);
 
             #region Pestañas
-            tabControl = new TabControl
+            tabControlGestor = new TabControl
             {
                 Dock = DockStyle.None,
                 Location = new Point(5, 45),
                 Size = new Size(Width - 10, Height - 50),
             };
 
-            tabReservas = new TabPage("Reservas");
-            tabRecintos = new TabPage("Recintos");
-            tabEspacios = new TabPage("Espacios");
-            tabGestores = new TabPage("Gestores");
+            tabPageReservas = new TabPage("Reservas");
+            tabPageRecintos = new TabPage("Recintos");
+            tabPageEspacios = new TabPage("Espacios");
+            tabPageGestores = new TabPage("Gestores");
 
-            tabControl.TabPages.Add(tabReservas);
-            tabControl.TabPages.Add(tabRecintos);
-            tabControl.TabPages.Add(tabEspacios);
+            tabControlGestor.TabPages.Add(tabPageReservas);
+            tabControlGestor.TabPages.Add(tabPageRecintos);
+            tabControlGestor.TabPages.Add(tabPageEspacios);
             if (Usuario != null && Usuario.IdRol == 3)
             {
-                tabControl.TabPages.Add(tabGestores);
+                tabControlGestor.TabPages.Add(tabPageGestores);
             }
 
-            Controls.Add(tabControl);
+            Controls.Add(tabControlGestor);
             #endregion
 
             #region Pestaña Reservas
@@ -73,29 +78,32 @@ namespace ReserVA
             {
                 Location = new Point(10, 30),
                 Size = new Size(200, 30),
-                DropDownStyle = ComboBoxStyle.DropDownList,
                 FlatStyle = FlatStyle.Flat,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                DropDownHeight = 200,
             };
 
             btnFiltrarReservas = new Button
             {
-                Text = "▼ Filtrar",
+                Text = Resources.Filtrar,
                 Location = new Point(230, 30),
+                Size = new Size(100, 30),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
                 FlatStyle = FlatStyle.Flat,
-                Size = new Size(100, 30),
+                Cursor = Cursors.Hand
             };
             btnFiltrarReservas.Click += BtnFiltrarReservas_Click;
 
             dgvReservas = new DataGridView 
             {
                 Location = new Point(10, 70),
-                Size = new Size(tabControl.Width - 30, tabControl.Height - 110),
+                Size = new Size(tabControlGestor.Width - 30, tabControlGestor.Height - 110),
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
                 DefaultCellStyle = { SelectionBackColor = Settings.Default.ColorPrimario, SelectionForeColor = Color.White },
                 ReadOnly = true,
+                AllowUserToAddRows = false,
                 Columns =
                 {
                     new DataGridViewTextBoxColumn { Name = "NumeroReserva", HeaderText = "Nº de reserva" },
@@ -108,10 +116,10 @@ namespace ReserVA
                 }
             };
 
-            tabReservas.Controls.Add(lblFiltroRecinto_Reservas);
-            tabReservas.Controls.Add(cbxFiltroRecinto_Reservas);
-            tabReservas.Controls.Add(btnFiltrarReservas);
-            tabReservas.Controls.Add(dgvReservas);
+            tabPageReservas.Controls.Add(lblFiltroRecinto_Reservas);
+            tabPageReservas.Controls.Add(cbxFiltroRecinto_Reservas);
+            tabPageReservas.Controls.Add(btnFiltrarReservas);
+            tabPageReservas.Controls.Add(dgvReservas);
             #endregion
 
             #region Pestaña Recintos
@@ -126,30 +134,32 @@ namespace ReserVA
             {
                 Location = new Point(10, 30),
                 Size = new Size(200, 30),
-                DropDownStyle = ComboBoxStyle.DropDownList,
                 FlatStyle = FlatStyle.Flat,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                DropDownHeight = 200,
             };
 
             btnFiltrarRecintos = new Button
             {
-                Text = "▼ Filtrar",
+                Text = Resources.Filtrar,
                 Location = new Point(230, 30),
                 Size = new Size(100, 30),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
                 FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
             btnFiltrarRecintos.Click += BtnFiltrarRecintos_Click;
 
             dgvRecintos = new DataGridView
             {
                 Location = new Point(10, 70),
-                Size = new Size(880, tabControl.Height - 110),
+                Size = new Size(880, tabControlGestor.Height - 110),
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                MultiSelect = false,
                 DefaultCellStyle = {SelectionBackColor = Settings.Default.ColorPrimario, SelectionForeColor = Color.White},
                 ReadOnly = true,
+                AllowUserToAddRows = false,
                 Columns =
                 {
                     new DataGridViewTextBoxColumn { Name = "IdRecinto", HeaderText = "IdRecinto", Visible = false },
@@ -197,9 +207,11 @@ namespace ReserVA
                 Location = new Point(930, 215), 
                 Width = 230,
                 FlatStyle = FlatStyle.Flat,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                DropDownHeight = 200,
             };
 
-            btnCrear_Recinto = new Button 
+            btnCrearRecinto = new Button 
             { 
                 Text = "➕ Crear", 
                 Location = new Point(930, 260), 
@@ -207,59 +219,63 @@ namespace ReserVA
                 Size = new Size(110, 40),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
-            btnCrear_Recinto.Click += BtnCrearRecinto_Click;
+            btnCrearRecinto.Click += BtnCrearRecinto_Click;
 
-            btnEditar_Recinto = new Button
+            btnEditarRecinto = new Button
             {
-                Text = "✏️ Editar",
+                Text = Resources.Editar,
                 Location = new Point(1050, 260),
                 Size = new Size(110, 40),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
-            btnEditar_Recinto.Click += BtnEditarRecinto_Click;
+            btnEditarRecinto.Click += BtnEditarRecinto_Click;
 
-            btnEliminar_Recinto = new Button
+            btnEliminarRecinto = new Button
             {
-                Text = "🗑️ Eliminar",
+                Text = Resources.Eliminar,
                 Location = new Point(930, 310),
                 Width = 70,
                 Size = new Size(110, 40),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
-            btnEliminar_Recinto.Click += BtnEliminarRecinto_Click;
+            btnEliminarRecinto.Click += BtnEliminarRecinto_Click;
 
-            btnRestablecer_Recinto = new Button
+            btnLimpiarCamposRecinto = new Button
             {
-                Text = "⭮ Restablecer",
+                Text = Resources.Limpiar,
                 Location = new Point(1050, 310),
                 Width = 70,
                 Size = new Size(110, 40),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
                 FlatStyle = FlatStyle.Flat,
-                Enabled = false,
+                Cursor = Cursors.Hand
             };
+            btnLimpiarCamposRecinto.Click += BtnLimpiarCamposRecinto_Click;
 
-            tabRecintos.Controls.Add(lblFiltroBarrio_Recintos);
-            tabRecintos.Controls.Add(cbxFiltroBarrio_Recintos);
-            tabRecintos.Controls.Add(btnFiltrarRecintos);
-            tabRecintos.Controls.Add(dgvRecintos);
-            tabRecintos.Controls.Add(lblNombre_Recinto);
-            tabRecintos.Controls.Add(tbxNombreRecinto);
-            tabRecintos.Controls.Add(lblDireccion_Recinto);
-            tabRecintos.Controls.Add(tbxDireccionRecinto);
-            tabRecintos.Controls.Add(lblSubzona_Recinto);
-            tabRecintos.Controls.Add(cbxSubzona_Recinto);
-            tabRecintos.Controls.Add(btnCrear_Recinto);
-            tabRecintos.Controls.Add(btnEditar_Recinto);
-            tabRecintos.Controls.Add(btnEliminar_Recinto);
-            tabRecintos.Controls.Add(btnRestablecer_Recinto);
+            tabPageRecintos.Controls.Add(lblFiltroBarrio_Recintos);
+            tabPageRecintos.Controls.Add(cbxFiltroBarrio_Recintos);
+            tabPageRecintos.Controls.Add(btnFiltrarRecintos);
+            tabPageRecintos.Controls.Add(dgvRecintos);
+            tabPageRecintos.Controls.Add(lblNombre_Recinto);
+            tabPageRecintos.Controls.Add(tbxNombreRecinto);
+            tabPageRecintos.Controls.Add(lblDireccion_Recinto);
+            tabPageRecintos.Controls.Add(tbxDireccionRecinto);
+            tabPageRecintos.Controls.Add(lblSubzona_Recinto);
+            tabPageRecintos.Controls.Add(cbxSubzona_Recinto);
+            tabPageRecintos.Controls.Add(btnCrearRecinto);
+            tabPageRecintos.Controls.Add(btnEditarRecinto);
+            tabPageRecintos.Controls.Add(btnEliminarRecinto);
+            tabPageRecintos.Controls.Add(btnLimpiarCamposRecinto);
             #endregion
 
             #region Pestaña Espacios
@@ -274,30 +290,32 @@ namespace ReserVA
             {
                 Location = new Point(10, 30),
                 Size = new Size(200, 30),
-                DropDownStyle = ComboBoxStyle.DropDownList,
                 FlatStyle = FlatStyle.Flat,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                DropDownHeight = 200,
             };
 
             btnFiltrarEspacios = new Button
             {
-                Text = "▼ Filtrar",
+                Text = Resources.Filtrar,
                 Location = new Point(230, 30),
                 Size = new Size(100, 30),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
                 FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
             btnFiltrarEspacios.Click += BtnFiltrarEspacios_Click;
 
             dgvEspacios = new DataGridView
             {
                 Location = new Point(10, 70),
-                Size = new Size(880, tabControl.Height - 110),
+                Size = new Size(880, tabControlGestor.Height - 110),
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                MultiSelect = false,
                 DefaultCellStyle = { SelectionBackColor = Settings.Default.ColorPrimario, SelectionForeColor = Color.White },
                 ReadOnly = true,
+                AllowUserToAddRows = false,
                 Columns =
                 {
                     new DataGridViewTextBoxColumn { Name = "IdEspacio", HeaderText = "IdEspacio", Visible = false },
@@ -318,7 +336,8 @@ namespace ReserVA
             };
             tbxNombreEspacio = new TextBox { 
                 Location = new Point(930, 95), 
-                Width = 230 };
+                Width = 230
+            };
 
             lblTipoEspacio = new Label 
             { 
@@ -358,6 +377,8 @@ namespace ReserVA
                 Location = new Point(930, 305), 
                 Width = 230,
                 FlatStyle = FlatStyle.Flat,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                DropDownHeight = 200,
             };
 
             btnCrearEspacio = new Button
@@ -368,61 +389,257 @@ namespace ReserVA
                 Size = new Size(110, 40),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
             btnCrearEspacio.Click += BtnCrearEspacio_Click;
 
             btnEditarEspacio = new Button
             {
-                Text = "✏️ Editar",
+                Text = Resources.Editar,
                 Location = new Point(1050, 350),
                 Size = new Size(110, 40),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
             btnEditarEspacio.Click += BtnEditarEspacio_Click;
 
             btnEliminarEspacio = new Button
             {
-                Text = "🗑️ Eliminar",
+                Text = Resources.Eliminar,
                 Location = new Point(930, 400),
                 Width = 70,
                 Size = new Size(110, 40),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
             btnEliminarEspacio.Click += BtnEliminarEspacio_Click;
 
-            btnRestablecerEspacio = new Button
+            btnLimpiarCamposEspacio = new Button
             {
-                Text = "⭮ Restablecer",
+                Text = Resources.Limpiar,
                 Location = new Point(1050, 400),
                 Width = 70,
                 Size = new Size(110, 40),
                 BackColor = Color.White,
                 ForeColor = Settings.Default.ColorPrimario,
                 FlatStyle = FlatStyle.Flat,
-                Enabled = false,
+                Cursor = Cursors.Hand
+            };
+            btnLimpiarCamposEspacio.Click += BtnLimpiarCamposEspacio_Click;
+
+            tabPageEspacios.Controls.Add(lblFiltroRecinto_Espacios);
+            tabPageEspacios.Controls.Add(cbxFiltroRecinto_Espacios);
+            tabPageEspacios.Controls.Add(btnFiltrarEspacios);
+            tabPageEspacios.Controls.Add(dgvEspacios);
+            tabPageEspacios.Controls.Add(lblNombreEspacio);
+            tabPageEspacios.Controls.Add(tbxNombreEspacio);
+            tabPageEspacios.Controls.Add(lblTipoEspacio);
+            tabPageEspacios.Controls.Add(tbxTipoEspacio);
+            tabPageEspacios.Controls.Add(lblDescripcionEspacio);
+            tabPageEspacios.Controls.Add(tbxDescripcionEspacio);
+            tabPageEspacios.Controls.Add(lblRecintoEspacio);
+            tabPageEspacios.Controls.Add(cbxRecintoEspacio);
+            tabPageEspacios.Controls.Add(btnCrearEspacio);
+            tabPageEspacios.Controls.Add(btnEditarEspacio);
+            tabPageEspacios.Controls.Add(btnEliminarEspacio);
+            tabPageEspacios.Controls.Add(btnLimpiarCamposEspacio);
+            #endregion#region Pestaña Espacios
+
+            #region Pestaña Gestores (sólo Administradores)
+            lblFiltroGestores = new Label
+            {
+                Text = "Introduzca el texto a buscar:",
+                Location = new Point(10, 10),
+                AutoSize = true
             };
 
-            tabEspacios.Controls.Add(lblFiltroRecinto_Espacios);
-            tabEspacios.Controls.Add(cbxFiltroRecinto_Espacios);
-            tabEspacios.Controls.Add(btnFiltrarEspacios);
-            tabEspacios.Controls.Add(dgvEspacios);
-            tabEspacios.Controls.Add(lblNombreEspacio);
-            tabEspacios.Controls.Add(tbxNombreEspacio);
-            tabEspacios.Controls.Add(lblTipoEspacio);
-            tabEspacios.Controls.Add(tbxTipoEspacio);
-            tabEspacios.Controls.Add(lblDescripcionEspacio);
-            tabEspacios.Controls.Add(tbxDescripcionEspacio);
-            tabEspacios.Controls.Add(lblRecintoEspacio);
-            tabEspacios.Controls.Add(cbxRecintoEspacio);
-            tabEspacios.Controls.Add(btnCrearEspacio);
-            tabEspacios.Controls.Add(btnEditarEspacio);
-            tabEspacios.Controls.Add(btnEliminarEspacio);
-            tabEspacios.Controls.Add(btnRestablecerEspacio);
+            tbxFiltroGestores = new TextBox
+            {
+                Location = new Point(10, 30),
+                Size = new Size(200, 30),
+            };
+
+            btnBuscarGestores = new Button
+            {
+                Text = Resources.Buscar,
+                Location = new Point(230, 30),
+                Size = new Size(100, 30),
+                BackColor = Color.White,
+                ForeColor = Settings.Default.ColorPrimario,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnBuscarGestores.Click += BtnBuscarGestores_Click;
+
+            dgvGestores = new DataGridView
+            {
+                Location = new Point(10, 70),
+                Size = new Size(880, tabControlGestor.Height - 110),
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                DefaultCellStyle = { SelectionBackColor = Settings.Default.ColorPrimario, SelectionForeColor = Color.White },
+                ReadOnly = true,
+                AllowUserToAddRows = false,
+                Columns =
+                {
+                    new DataGridViewTextBoxColumn { Name = "IdUsuario", HeaderText = "IdUsuario", Visible = false },
+                    new DataGridViewTextBoxColumn { Name = "Nombre", HeaderText = "Nombre" },
+                    new DataGridViewTextBoxColumn { Name = "Apellidos", HeaderText = "Apellidos" },
+                    new DataGridViewTextBoxColumn { Name = "DocumentoIdentidad", HeaderText = "DNI, NIE o Pasaporte" },
+                    new DataGridViewTextBoxColumn { Name = "Telefono", HeaderText = "Teléfono" },
+                    new DataGridViewTextBoxColumn { Name = "CorreoElectronico", HeaderText = "Correo electrónico" }
+                }
+            };
+            dgvGestores.SelectionChanged += DgvGestores_SelectionChanged;
+
+            lblNombreGestor = new Label 
+            { 
+                Text = "Nombre", 
+                Location = new Point(930, 70), 
+                Width = 230 
+            };
+            tbxNombreGestor = new TextBox { 
+                Location = new Point(930, 95), 
+                Width = 230 
+            };
+
+            lblApellidosGestor = new Label 
+            { 
+                Text = "Apellidos", 
+                Location = new Point(930, 130), 
+                Width = 230 
+            };
+            tbxApellidosGestor = new TextBox 
+            { 
+                Location = new Point(930, 155), 
+                Width = 230 
+            };
+            
+            lblDocumentoIdentidadGestor = new Label 
+            { 
+                Text = "DNI, NIE, ...", 
+                Location = new Point(930, 190), 
+                Width = 110,
+            };
+            tbxDocumentoIdentidadGestor = new TextBox
+            {
+                Location = new Point(930, 215),
+                Width = 110,
+            };
+
+            lblTelefonoGestor = new Label 
+            { 
+                Text = "Teléfono", 
+                Location = new Point(1050, 190), 
+                Width = 110 
+            };
+            tbxTelefonoGestor = new TextBox
+            {
+                Location = new Point(1050, 215),
+                Width = 110,
+            };
+
+            lblCorreoElectronicoGestor = new Label 
+            { 
+                Text = "Correo electrónico", 
+                Location = new Point(930, 250), 
+                Width = 230 
+            };
+            tbxCorreoElectronicoGestor = new TextBox
+            {
+                Location = new Point(930, 275),
+                Width = 230,
+            };
+
+            lblContraseñaGestor = new Label 
+            { 
+                Text = "Contraseña", 
+                Location = new Point(930, 310), 
+                Width = 230 
+            };
+            tbxContrasenaGestor = new TextBox
+            {
+                Location = new Point(930, 335),
+                Width = 230,
+                UseSystemPasswordChar = true,
+            };
+
+            btnCrearGestor = new Button
+            {
+                Text = "➕ Crear",
+                Location = new Point(930, 380),
+                Width = 70,
+                Size = new Size(110, 40),
+                BackColor = Color.White,
+                ForeColor = Settings.Default.ColorPrimario,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnCrearGestor.Click += BtnCrearGestor_Click;
+
+            btnEditarGestor = new Button
+            {
+                Text = Resources.Editar,
+                Location = new Point(1050, 380),
+                Size = new Size(110, 40),
+                BackColor = Color.White,
+                ForeColor = Settings.Default.ColorPrimario,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnEditarGestor.Click += BtnEditarGestor_Click;
+
+            btnEliminarGestor = new Button
+            {
+                Text = Resources.Eliminar,
+                Location = new Point(930, 430),
+                Width = 70,
+                Size = new Size(110, 40),
+                BackColor = Color.White,
+                ForeColor = Settings.Default.ColorPrimario,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnEliminarGestor.Click += BtnEliminarGestor_Click;
+
+            btnLimpiarCamposGestor = new Button
+            {
+                Text = Resources.Limpiar,
+                Location = new Point(1050, 430),
+                Width = 70,
+                Size = new Size(110, 40),
+                BackColor = Color.White,
+                ForeColor = Settings.Default.ColorPrimario,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnLimpiarCamposGestor.Click += BtnLimpiarCamposGestor_Click;
+
+            tabPageGestores.Controls.Add(lblFiltroGestores);
+            tabPageGestores.Controls.Add(tbxFiltroGestores);
+            tabPageGestores.Controls.Add(btnBuscarGestores);
+            tabPageGestores.Controls.Add(dgvGestores);
+            tabPageGestores.Controls.Add(lblNombreGestor);
+            tabPageGestores.Controls.Add(tbxNombreGestor);
+            tabPageGestores.Controls.Add(lblApellidosGestor);
+            tabPageGestores.Controls.Add(tbxApellidosGestor);
+            tabPageGestores.Controls.Add(lblDocumentoIdentidadGestor);
+            tabPageGestores.Controls.Add(tbxDocumentoIdentidadGestor);
+            tabPageGestores.Controls.Add(lblTelefonoGestor);
+            tabPageGestores.Controls.Add(tbxTelefonoGestor);
+            tabPageGestores.Controls.Add(lblCorreoElectronicoGestor);
+            tabPageGestores.Controls.Add(tbxCorreoElectronicoGestor);
+            tabPageGestores.Controls.Add(lblContraseñaGestor);
+            tabPageGestores.Controls.Add(tbxContrasenaGestor);
+            tabPageGestores.Controls.Add(btnCrearGestor);
+            tabPageGestores.Controls.Add(btnEditarGestor);
+            tabPageGestores.Controls.Add(btnEliminarGestor);
+            tabPageGestores.Controls.Add(btnLimpiarCamposGestor);
             #endregion
         }
     }
