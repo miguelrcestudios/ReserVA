@@ -21,8 +21,21 @@ namespace ReserVA
 
         private void InitializeComponent()
         {
-            Fecha = DateTime.Today;
-            HoraInicio = DateTime.Now.AddHours(1).AddMinutes(-DateTime.Now.Minute).AddSeconds(-DateTime.Now.Second);
+            if (DateTime.Now > DateTime.Today.AddHours(21))
+            {
+                Fecha = DateTime.Today.AddDays(1);
+                HoraInicio = Fecha.AddHours(8);
+            }
+            else if (DateTime.Now < DateTime.Today.AddHours(8))
+            {
+                Fecha = DateTime.Today;
+                HoraInicio = DateTime.Now.AddHours(8 - DateTime.Now.Hour).AddMinutes(-DateTime.Now.Minute).AddSeconds(-DateTime.Now.Second);
+            }
+            else
+            {
+                Fecha = DateTime.Today;
+                HoraInicio = DateTime.Now.AddHours(1).AddMinutes(-DateTime.Now.Minute).AddSeconds(-DateTime.Now.Second);
+            }
             HoraFin = HoraInicio.AddHours(1);
 
             // Sección Usuario
@@ -67,7 +80,8 @@ namespace ReserVA
             tbxDocumentoIdentidad = new TextBox
             {
                 Location = new Point(50, 170),
-                Width = 200
+                Width = 200,
+                MaxLength = 9,
             };
 
             lblTelefono = new Label
@@ -79,7 +93,8 @@ namespace ReserVA
             tbxTelefono = new TextBox
             {
                 Location = new Point(300, 170),
-                Width = 200
+                Width = 200,
+                MaxLength = 9,
             };
 
             lblCorreoElectronico = new Label

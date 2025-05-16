@@ -11,8 +11,7 @@ namespace ReserVA
         protected Panel panelSuperior;
         protected PictureBox pbxIcono;
         protected Label lblTitulo;
-        protected Button btnMinimizar;
-        protected Button btnCerrar;
+        protected Button btnMinimizar, btnCerrar;
 
         protected override void Dispose(bool disposing)
         {
@@ -22,77 +21,88 @@ namespace ReserVA
 
         private void InitializeComponent()
         {
-            this.Icon = Resources.Icono_EscudoAyuntamientoValladolid;
-            this.Text = Resources.Título;
+            Icon = Resources.Icono_EscudoAyuntamientoValladolid;
+            Text = Resources.Título;
+            Font = new Font("Trebuchet MS", 9F);
+            FormBorderStyle = FormBorderStyle.None;
 
-            this.panelSuperior = new Panel();
-            this.pbxIcono = new PictureBox();
-            this.lblTitulo = new Label();
-            this.btnMinimizar = new Button();
-            this.btnCerrar = new Button();
-            this.panelSuperior.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxIcono)).BeginInit();
-            this.SuspendLayout();
+            panelSuperior = new Panel
+            {
+                Size = new Size(this.ClientSize.Width, 40),
+                Dock = DockStyle.Top,
+                BackColor = Settings.Default.ColorVentana,
+            };
+            panelSuperior.MouseDown += PanelSuperior_MouseDown;
+            panelSuperior.MouseMove += PanelSuperior_MouseMove;
+            panelSuperior.MouseUp += PanelSuperior_MouseUp;
+            
 
-            this.panelSuperior.BackColor = Settings.Default.ColorVentana;
-            this.panelSuperior.Controls.Add(this.pbxIcono);
-            this.panelSuperior.Controls.Add(this.lblTitulo);
-            this.panelSuperior.Controls.Add(this.btnMinimizar);
-            this.panelSuperior.Controls.Add(this.btnCerrar);
-            this.panelSuperior.Dock = DockStyle.Top;
-            this.panelSuperior.Size = new Size(this.ClientSize.Width, 40);
-            this.panelSuperior.MouseDown += new MouseEventHandler(this.PanelSuperior_MouseDown);
-            this.panelSuperior.MouseMove += new MouseEventHandler(this.PanelSuperior_MouseMove);
-            this.panelSuperior.MouseUp += new MouseEventHandler(this.PanelSuperior_MouseUp);
+            pbxIcono = new PictureBox
+            {
+                Image = Resources.EscudoAyuntamientoValladolid,
+                Location = new Point(2, 2),
+                Size = new Size(36, 36),
+                SizeMode = PictureBoxSizeMode.StretchImage,
+            };
+            pbxIcono.MouseDown += PanelSuperior_MouseDown;
+            pbxIcono.MouseMove += PanelSuperior_MouseMove;
+            pbxIcono.MouseUp += PanelSuperior_MouseUp;
 
-            this.pbxIcono.Image = Resources.EscudoAyuntamientoValladolid;
-            this.pbxIcono.Location = new Point(2, 2);
-            this.pbxIcono.Size = new Size(36, 36);
-            this.pbxIcono.SizeMode = PictureBoxSizeMode.StretchImage;
-            this.pbxIcono.MouseDown += new MouseEventHandler(this.PanelSuperior_MouseDown);
-            this.pbxIcono.MouseMove += new MouseEventHandler(this.PanelSuperior_MouseMove);
-            this.pbxIcono.MouseUp += new MouseEventHandler(this.PanelSuperior_MouseUp);
+            lblTitulo = new Label
+            {
+                Font = new Font("Trebuchet MS", 12F, FontStyle.Bold),
+                ForeColor = Color.White,
+                Location = new Point(42, 0),
+                Size = new Size(200, 40),
+                Text = Resources.Título,
+                TextAlign = ContentAlignment.MiddleLeft,
+            };
+            lblTitulo.MouseDown += PanelSuperior_MouseDown;
+            lblTitulo.MouseMove += PanelSuperior_MouseMove;
+            lblTitulo.MouseUp += PanelSuperior_MouseUp;
 
-            this.lblTitulo.Font = new Font("Trebuchet MS", 12F, FontStyle.Bold);
-            this.lblTitulo.ForeColor = Color.White;
-            this.lblTitulo.Location = new Point(42, 0);
-            this.lblTitulo.Size = new Size(200, 40);
-            this.lblTitulo.Text = Resources.Título;
-            this.lblTitulo.TextAlign = ContentAlignment.MiddleLeft;
-            this.lblTitulo.MouseDown += new MouseEventHandler(this.PanelSuperior_MouseDown);
-            this.lblTitulo.MouseMove += new MouseEventHandler(this.PanelSuperior_MouseMove);
-            this.lblTitulo.MouseUp += new MouseEventHandler(this.PanelSuperior_MouseUp);
+            btnMinimizar = new Button
+            {
+                Text = "—",
+                Location = new Point(this.ClientSize.Width - 80, 0),
+                Size = new Size(40, 40),
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                ForeColor = Color.White,
+                BackColor = Settings.Default.ColorVentana,
+                FlatStyle = FlatStyle.Flat,
+                FlatAppearance = { BorderSize = 0 },
+                Cursor = Cursors.Hand,
+            };
+            btnMinimizar.Click += BtnMinimizar_Click;
+            btnMinimizar.MouseEnter += Button_MouseEnter;
+            btnMinimizar.MouseLeave += Button_MouseLeave;
 
-            this.btnCerrar.FlatAppearance.BorderSize = 0;
-            this.btnCerrar.FlatStyle = FlatStyle.Flat;
-            this.btnCerrar.ForeColor = Color.White;
-            this.btnCerrar.Size = new Size(40, 40);
-            this.btnCerrar.Location = new Point(this.ClientSize.Width - 40, 0);
-            this.btnCerrar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            this.btnCerrar.Text = "✕";
-            this.btnCerrar.Click += new EventHandler(this.BtnCerrar_Click);
-            this.btnCerrar.MouseEnter += new EventHandler(this.Button_MouseEnter);
-            this.btnCerrar.MouseLeave += new EventHandler(this.Button_MouseLeave);
-            this.btnCerrar.BackColor = Settings.Default.ColorVentana;
-            this.btnCerrar.Cursor = Cursors.Hand;
+            btnCerrar = new Button {
+                Text = "✕",
+                Location = new Point(this.ClientSize.Width - 40, 0),
+                Size = new Size(40, 40),
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                FlatAppearance = { BorderSize = 0},
+                BackColor = Settings.Default.ColorVentana,
+                Cursor = Cursors.Hand,
+            };
+            btnCerrar.Click += BtnCerrar_Click;
+            btnCerrar.MouseEnter += Button_MouseEnter;
+            btnCerrar.MouseLeave += Button_MouseLeave;            
 
-            this.btnMinimizar.FlatAppearance.BorderSize = 0;
-            this.btnMinimizar.FlatStyle = FlatStyle.Flat;
-            this.btnMinimizar.ForeColor = Color.White;
-            this.btnMinimizar.Size = new Size(40, 40);
-            this.btnMinimizar.Location = new Point(this.ClientSize.Width - 80, 0);
-            this.btnMinimizar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            this.btnMinimizar.Text = "—";
-            this.btnMinimizar.Click += new EventHandler(this.BtnMinimizar_Click);
-            this.btnMinimizar.MouseEnter += new EventHandler(this.Button_MouseEnter);
-            this.btnMinimizar.MouseLeave += new EventHandler(this.Button_MouseLeave);
-            this.btnMinimizar.BackColor = Settings.Default.ColorVentana;
-            this.btnMinimizar.Cursor = Cursors.Hand;
+            panelSuperior.Controls.Add(pbxIcono);
+            panelSuperior.Controls.Add(lblTitulo);
+            panelSuperior.Controls.Add(btnMinimizar);
+            panelSuperior.Controls.Add(btnCerrar);
 
-            this.Controls.Add(this.panelSuperior);
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.Font = new Font("Trebuchet MS", 9F);
-            this.ResumeLayout(false);
+            panelSuperior.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(pbxIcono)).BeginInit();
+            SuspendLayout();
+
+            Controls.Add(panelSuperior);
+            ResumeLayout(false);
         }
     }
 }

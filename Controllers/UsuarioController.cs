@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
 using System.Linq;
-using System.Numerics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using ReserVA;
 
 namespace ReserVA.Controller
 {

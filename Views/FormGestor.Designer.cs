@@ -530,6 +530,7 @@ namespace ReserVA
             {
                 Location = new Point(930, 215),
                 Width = 110,
+                MaxLength = 9,
             };
 
             lblTelefonoGestor = new Label 
@@ -542,6 +543,7 @@ namespace ReserVA
             {
                 Location = new Point(1050, 215),
                 Width = 110,
+                MaxLength = 9,
             };
 
             lblCorreoElectronicoGestor = new Label 
